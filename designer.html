@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Frame Designer | Junior's Printing World</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .designer-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 3rem;
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+            padding: 2rem;
+        }
+
+        @media (max-width: 992px) {
+            .designer-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .preview-area {
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--color-border);
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+            min-height: 500px;
+        }
+
+        .upload-placeholder {
+            text-align: center;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed var(--color-border);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+        }
+
+        .upload-placeholder:hover, .upload-placeholder.dragover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .frame-container {
+            display: none;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            transition: all var(--transition-medium);
+            background: #fff;
+        }
+
+        .frame-border {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+            transition: all var(--transition-fast);
+        }
+
+        .user-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .controls-area {
+            background: var(--color-bg-secondary);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+        }
+
+        .controls-area::-webkit-scrollbar {
+            width: 8px;
+        }
+        .controls-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .controls-area::-webkit-scrollbar-thumb {
+            background: var(--color-border);
+            border-radius: 4px;
+        }
+
+        .control-group {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 1.5rem;
+        }
+
+        .control-group:last-child {
+            border-bottom: none;
+        }
+
+        .control-label {
+            font-family: var(--font-sans);
+            font-weight: 500;
+            margin-bottom: 1rem;
+            display: block;
+            font-size: 1.1rem;
+            color: var(--color-text);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .option-btn {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-text-muted);
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-family: var(--font-sans);
+        }
+
+        .option-btn:hover {
+            border-color: var(--color-accent);
+        }
+
+        .option-btn.active {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .color-options {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: transform var(--transition-fast);
+        }
+
+        .color-btn.active {
+            transform: scale(1.1);
+            border-color: var(--color-accent);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .price-calculator {
+            background: rgba(0,0,0,0.5);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            margin-top: 2rem;
+            text-align: center;
+            border: 1px solid var(--color-accent);
+        }
+
+        .price-calculator h3 {
+            font-size: 2rem;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar scrolled" id="nav">
+        <div class="container">
+            <a href="index.html" class="brand">Junior's Printing World</a>
+            <ul class="nav-links" id="navlinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="designer.html" class="active">Frame Designer</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="https://wa.me/919030829667" class="nav-wa" target="_blank"><i class="fa-brands fa-whatsapp"></i> Order Now</a></li>
+            </ul>
+            <div style="display:flex;align-items:center;gap:1.5rem">
+                <div class="theme-toggle" id="themeToggle" style="cursor:pointer;font-size:1.1rem;color:var(--gold);display:inline-flex;align-items:center;justify-content:center;transition:transform var(--tf);z-index:9005"><i class="fa-solid fa-moon"></i></div>
+                <div class="hamburger" id="hbg"><span></span><span></span><span></span></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Designer UI -->
+    <div class="designer-layout">
+        
+        <!-- Left: Preview -->
+        <div class="preview-area" id="dropZone">
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            
+            <div class="upload-placeholder" id="uploadPlaceholder" onclick="document.getElementById('fileInput').click()">
+                <i class="fa-solid fa-cloud-arrow-up text-gold" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; font-family: var(--font-sans);">Upload Your Photo</h3>
+                <p>Drag & Drop or Click to Browse</p>
+                <p style="font-size: 0.8rem; margin-top: 1rem; opacity: 0.7;">High resolution recommended</p>
+            </div>
+
+            <div class="frame-container" id="frameContainer">
+                <img id="userImage" class="user-photo" src="" alt="Your Photo">
+                <div class="frame-border" id="frameBorder"></div>
+            </div>
+            
+            <button id="resetBtn" class="btn btn-outline" style="position: absolute; top: 20px; right: 20px; display: none;">
+                <i class="fa-solid fa-rotate-left"></i> &nbsp;Reset
+            </button>
+        </div>
+
+        <!-- Right: Controls -->
+        <div class="controls-area">
+            <h2 style="margin-bottom: 2rem; font-size: 1.8rem;">Custom Studio</h2>
+
+            <div class="control-group">
+                <span class="control-label">1. Frame Style</span>
+                <div class="options-grid" id="styleOptions">
+                    <button class="option-btn active" data-style="modern">Modern Minimalist</button>
+                    <button class="option-btn" data-style="classic">Classic Wooden</button>
+                    <button class="option-btn" data-style="acrylic">Premium Acrylic</button>
+                    <button class="option-btn" data-style="metal">Sleek Metal</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <span class="control-label">2. Frame Color</span>
+                <div class="color-options" id="colorOptions">
+                    <button class="color-btn active" style="background: #111;" data-color="#111"></button>
+                    <button class="color-btn" style="background: #ffffff; border: 1px solid #ccc;" data-color="#fff"></button>
+                    <button class="color-btn" style="background: #8b5a2b;" data-color="#8b5a2b"></button>
+                    <button class="color-btn" style="background: #d4af37;" data-color="#d4af37"></button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <span class="control-label">3. Size</span>
+                <div class="options-grid" id="sizeOptions">
+                    <button class="option-btn" data-size="a4" data-price="120">A4 Size</button>
+                    <button class="option-btn active" data-size="8x12" data-price="299">8 × 12 Inches</button>
+                    <button class="option-btn" data-size="a3" data-price="499">A3 Size</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <span class="control-label">4. Border Width (Matte)</span>
+                <div class="options-grid" id="borderOptions">
+                    <button class="option-btn active" data-border="0" data-bprice="0">No Border</button>
+                    <button class="option-btn" data-border="1" data-bprice="50">1 Inch (+₹50)</button>
+                    <button class="option-btn" data-border="2" data-bprice="100">2 Inch (+₹100)</button>
+                </div>
+            </div>
+
+            <div class="price-calculator">
+                <span class="text-muted" style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem;">Estimated Total</span>
+                <h3 id="totalPrice">₹299</h3>
+                <button id="orderBtn" class="btn btn-primary" style="width: 100%; font-size: 1.1rem; padding: 15px;">
+                    <i class="fa-brands fa-whatsapp"></i> &nbsp;Order on WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/designer.js"></script>
+</body>
+</html>

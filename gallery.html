@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery Showcase | Junior's Printing World</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+.gallery-header{padding:140px 0 40px;text-align:center;background:radial-gradient(ellipse at bottom,#110d00,#000);border-bottom:1px solid var(--border)}
+.gallery-filters{display:flex;justify-content:center;gap:1rem;margin:2rem 0;flex-wrap:wrap}
+.gallery-filter-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:8px 24px;border-radius:var(--r-full);font-family:var(--sans);font-size:.85rem;cursor:pointer;transition:all var(--tf)}
+.gallery-filter-btn:hover,.gallery-filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(212,175,55,.05)}
+
+.masonry{column-count:3;column-gap:1.5rem;padding:2rem 0}
+@media(max-width:900px){.masonry{column-count:2}}
+@media(max-width:600px){.masonry{column-count:1}}
+
+.masonry-item{break-inside:avoid;margin-bottom:1.5rem;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;border:1px solid var(--border)}
+.masonry-item img{width:100%;display:block;transition:transform var(--ts)}
+.masonry-item:hover img{transform:scale(1.06)}
+.masonry-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.2) 60%,transparent 100%);padding:1.5rem;display:flex;flex-direction:column;justify-content:flex-end;opacity:0;transition:opacity var(--tf)}
+.masonry-item:hover .masonry-overlay{opacity:1}
+.masonry-title{font-family:'Cinzel',serif;font-size:1.1rem;color:#fff;margin-bottom:.3rem}
+.masonry-cat{font-size:.7rem;color:var(--gold);text-transform:uppercase;letter-spacing:1px}
+
+/* Lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:99999;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .3s ease}
+.lightbox.show{display:flex;opacity:1}
+.lightbox-content{max-width:85%;max-height:85%;position:relative}
+.lightbox-content img{max-width:100%;max-height:80vh;border-radius:8px;border:1px solid rgba(255,255,255,.1)}
+.lightbox-close{position:absolute;top:-40px;right:0;background:none;border:none;color:#fff;font-size:1.8rem;cursor:pointer}
+.lightbox-caption{color:#fff;text-align:center;margin-top:1rem;font-family:'Cinzel',serif;font-size:1.2rem}
+</style>
+</head>
+<body>
+
+<nav class="navbar scrolled" id="nav">
+<div class="container">
+<a href="index.html" class="brand">Junior's Printing World</a>
+<ul class="nav-links" id="navlinks">
+<li><a href="index.html">Home</a></li>
+<li><a href="shop.html">Shop</a></li>
+<li><a href="designer.html">Frame Designer</a></li>
+<li><a href="gallery.html" class="active">Gallery</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="contact.html">Contact</a></li>
+<li><a href="https://wa.me/919030829667" class="nav-wa" target="_blank"><i class="fa-brands fa-whatsapp"></i> Order Now</a></li>
+</ul>
+<div style="display:flex;align-items:center;gap:1.5rem">
+<div class="theme-toggle" id="themeToggle" style="cursor:pointer;font-size:1.1rem;color:var(--gold);display:inline-flex;align-items:center;justify-content:center;transition:transform var(--tf);z-index:9005"><i class="fa-solid fa-moon"></i></div>
+<div class="hamburger" id="hbg"><span></span><span></span><span></span></div>
+</div>
+</div>
+</nav>
+
+<header class="gallery-header">
+<div class="container">
+<h1 style="font-family:'Cinzel',serif;font-size:3rem;margin-bottom:.5rem">Bespoke Gallery</h1>
+<p class="text-muted">A showcase of masterpieces, custom frames, and magic mugs crafted for our clients.</p>
+<div class="gallery-filters" id="g-filters">
+<button class="gallery-filter-btn active" data-filter="all">All Items</button>
+<button class="gallery-filter-btn" data-filter="blood-art">Blood Art</button>
+<button class="gallery-filter-btn" data-filter="frames">Frames</button>
+<button class="gallery-filter-btn" data-filter="gifts">Magic Mugs</button>
+</div>
+</div>
+</header>
+
+<section class="section" style="padding-top:2rem">
+<div class="container">
+<div class="masonry" id="masonry-grid">
+<!-- Gallery items -->
+</div>
+</div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+<div class="lightbox-content">
+<button class="lightbox-close" id="lightbox-close"><i class="fa-solid fa-xmark"></i></button>
+<img src="" alt="" id="lightbox-img">
+<div class="lightbox-caption" id="lightbox-caption">Caption</div>
+</div>
+</div>
+
+<footer>
+<div class="container">
+<div class="footer-grid">
+<div class="footer-brand">
+<h3>Junior's Printing World</h3>
+<p>Turn Your Memories Into Beautiful Art. Premium photo frames, blood art, and custom gifts designed to elevate your living space.</p>
+</div>
+<div class="footer-links">
+<h4>Contact &amp; Location</h4>
+<ul>
+<li><a href="tel:+919030829667">+91 9030829667</a></li>
+<li><a href="https://maps.app.goo.gl/MVhEMSAQm2VDoeSB7" target="_blank"><i class="fa-solid fa-map-pin" style="color:var(--gold)"></i> HPCL Campus, Nathavaram, AP 531117</a></li>
+<li>Open Daily · Closes 10 PM</li>
+</ul>
+</div>
+</div>
+</div>
+</footer>
+
+<a href="https://wa.me/919030829667" target="_blank" class="floating-wa"><i class="fa-brands fa-whatsapp"></i></a>
+<div class="back-top" id="bt"><i class="fa-solid fa-arrow-up"></i></div>
+
+<script src="js/main.js"></script>
+<script>
+const galleryItems = [
+  {title:"Single Person Blood Art", cat:"blood-art", img:"assets/blood_art.png"},
+  {title:"Wedding Couple Golden Border", cat:"frames", img:"assets/frame_wedding.png"},
+  {title:"Double Person Blood Art", cat:"blood-art", img:"assets/blood_art.png"},
+  {title:"Collage Family Frame Layout", cat:"frames", img:"assets/frame_collage.png"},
+  {title:"Heat Activated Reveal", cat:"gifts", img:"assets/premium_mug.png"},
+  {title:"Bespoke Walnut Frame Custom", cat:"frames", img:"assets/frame_wooden.png"},
+  {title:"Acrylic Floating Board Frame", cat:"frames", img:"assets/frame_acrylic.png"},
+  {title:"Brushed Gunmetal Frame", cat:"frames", img:"assets/frame_metal.png"},
+  {title:"Traditional Ornate gold frame", cat:"frames", img:"assets/frame_wedding.png"}
+];
+
+const grid = document.getElementById('masonry-grid');
+const filters = document.getElementById('g-filters');
+
+function renderGallery(filter = 'all') {
+  grid.innerHTML = '';
+  galleryItems.forEach(item => {
+    if (filter !== 'all' && item.cat !== filter) return;
+    
+    const div = document.createElement('div');
+    div.className = 'masonry-item reveal active';
+    div.innerHTML = `
+      <img src="${item.img}" alt="${item.title}">
+      <div class="masonry-overlay">
+        <h4 class="masonry-title">${item.title}</h4>
+        <span class="masonry-cat">${item.cat.replace('-', ' ')}</span>
+      </div>
+    `;
+    
+    div.onclick = () => openLightbox(item);
+    grid.appendChild(div);
+  });
+}
+
+// Filter clicks
+document.querySelectorAll('.gallery-filter-btn').forEach(btn => {
+  btn.onclick = (e) => {
+    document.querySelectorAll('.gallery-filter-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    renderGallery(e.target.getAttribute('data-filter'));
+  };
+});
+
+// Lightbox
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lightbox-img');
+const lbCap = document.getElementById('lightbox-caption');
+
+function openLightbox(item) {
+  lbImg.src = item.img;
+  lbCap.textContent = item.title;
+  lb.classList.add('show');
+}
+
+document.getElementById('lightbox-close').onclick = () => {
+  lb.classList.remove('show');
+};
+
+lb.onclick = (e) => {
+  if (e.target === lb) lb.classList.remove('show');
+};
+
+// Initial Render
+renderGallery();
+</script>
+</body>
+</html>

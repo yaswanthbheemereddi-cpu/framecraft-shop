@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Details | Junior's Printing World</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+.product-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;padding:140px 0 60px}
+@media(max-width:900px){.product-layout{grid-template-columns:1fr;gap:2rem}}
+.product-gallery{position:sticky;top:100px;height:fit-content}
+.main-image{width:100%;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);box-shadow:0 15px 40px rgba(0,0,0,.5)}
+.main-image img{width:100%;height:auto;display:block}
+.product-details{padding-top:1rem}
+.breadcrumb{font-size:.85rem;color:var(--muted);margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:1px}
+.breadcrumb a{color:var(--gold)}
+.title{font-size:2.8rem;margin-bottom:.8rem;color:#fff}
+.price{font-size:2.2rem;color:var(--gold);margin-bottom:1.5rem;font-family:var(--sans);font-weight:300}
+.description{color:var(--muted);font-size:1.05rem;margin-bottom:2rem;line-height:1.8}
+.features-list{list-style:none;margin-bottom:2.5rem}
+.features-list li{margin-bottom:.8rem;display:flex;align-items:center;gap:.8rem;font-family:var(--sans);font-size:.95rem;color:#fff}
+.features-list i{color:var(--gold)}
+.variant-selector{margin-bottom:2rem}
+.variant-selector label{display:block;margin-bottom:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-size:.8rem}
+.variant-selector select{width:100%;padding:14px;background:var(--bg2);border:1px solid var(--border);color:#fff;border-radius:8px;font-family:var(--sans);font-size:.95rem;outline:none}
+.variant-selector select:focus{border-color:var(--gold)}
+</style>
+</head>
+<body>
+
+<nav class="navbar scrolled" id="nav">
+<div class="container">
+<a href="index.html" class="brand">Junior's Printing World</a>
+<ul class="nav-links" id="navlinks">
+<li><a href="index.html">Home</a></li>
+<li><a href="shop.html">Shop</a></li>
+<li><a href="designer.html">Frame Designer</a></li>
+<li><a href="gallery.html">Gallery</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="contact.html">Contact</a></li>
+<li><a href="https://wa.me/919030829667" class="nav-wa" target="_blank"><i class="fa-brands fa-whatsapp"></i> Order Now</a></li>
+</ul>
+<div style="display:flex;align-items:center;gap:1.5rem">
+<div class="theme-toggle" id="themeToggle" style="cursor:pointer;font-size:1.1rem;color:var(--gold);display:inline-flex;align-items:center;justify-content:center;transition:transform var(--tf);z-index:9005"><i class="fa-solid fa-moon"></i></div>
+<div class="hamburger" id="hbg"><span></span><span></span><span></span></div>
+</div>
+</div>
+</nav>
+
+<div class="container">
+<div class="product-layout">
+<!-- Left: Gallery -->
+<div class="product-gallery reveal">
+<div class="main-image">
+<img src="" alt="" id="mainProdImg">
+</div>
+</div>
+
+<!-- Right: Details -->
+<div class="product-details reveal" style="transition-delay:0.2s">
+<div class="breadcrumb">
+<a href="shop.html">Shop</a> / <span id="catName">Category</span>
+</div>
+<h1 class="title" id="prodTitle">Product Name</h1>
+<div class="price" id="prodPrice">₹0</div>
+<p class="description" id="prodDesc">Product description here.</p>
+
+<ul class="features-list">
+<li><i class="fa-solid fa-check"></i> Handcrafted &amp; Framed to Perfection</li>
+<li><i class="fa-solid fa-check"></i> Museum-Grade Premium Fine Art Print</li>
+<li><i class="fa-solid fa-check"></i> Gift Wrap &amp; Customized Text Card Available</li>
+<li><i class="fa-solid fa-check"></i> 100% Damage-Free Delivery Guarantee</li>
+</ul>
+
+<div class="variant-selector" id="variant-area" style="display:none">
+<label id="variant-label">Select Options</label>
+<select id="variantSelect">
+<!-- Dynamic options -->
+</select>
+</div>
+
+<button class="btn btn-primary" id="orderBtn" style="width:100%;font-size:1.1rem;padding:16px"><i class="fa-brands fa-whatsapp"></i> Order via WhatsApp</button>
+<p style="text-align:center;margin-top:1rem;color:var(--muted);font-size:.85rem"><i class="fa-solid fa-shield-halved"></i> 100% Safe WhatsApp Direct Booking</p>
+</div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+<div class="container">
+<div class="footer-grid">
+<div class="footer-brand">
+<h3>Junior's Printing World</h3>
+<p>Turn Your Memories Into Beautiful Art. Premium photo frames, blood art, and custom gifts designed to elevate your living space.</p>
+</div>
+</div>
+</div>
+</footer>
+
+<a href="https://wa.me/919030829667" target="_blank" class="floating-wa"><i class="fa-brands fa-whatsapp"></i></a>
+<div class="back-top" id="bt"><i class="fa-solid fa-arrow-up"></i></div>
+
+<script src="js/main.js"></script>
+<script>
+// --- 20 PRODUCTS DATA ---
+const products = [
+  {id:1, name:"Single Person Blood Art (A4)", price:2500, cat:"Blood Art", img:"assets/blood_art.png", desc:"Stunning handcrafted red ink portrait on textured paper in premium black A4 frame.", options:[{name:"A4 Size", price:2500}, {name:"A3 Size", price:3500}]},
+  {id:2, name:"Single Person Blood Art (A3)", price:3500, cat:"Blood Art", img:"assets/blood_art.png", desc:"Stunning handcrafted red ink portrait on textured paper in premium black A3 frame.", options:[{name:"A3 Size", price:3500}]},
+  {id:3, name:"Double Person Blood Art (A4)", price:3500, cat:"Blood Art", img:"assets/blood_art.png", desc:"Beautiful double portrait handcrafted in signature red ink in premium black A4 frame.", options:[{name:"A4 Size", price:3500}, {name:"A3 Size", price:4500}]},
+  {id:4, name:"Double Person Blood Art (A3)", price:4500, cat:"Blood Art", img:"assets/blood_art.png", desc:"Beautiful double portrait handcrafted in signature red ink in premium black A3 frame.", options:[{name:"A3 Size", price:4500}]},
+  {id:5, name:"A4 Customized Frame", price:120, cat:"Customized Frames", img:"assets/custom_frame.png", desc:"Simple sleek border frame with premium photo print. Perfect for tabletops or walls."},
+  {id:6, name:"8x12 Designer Photo Frame", price:299, cat:"Designer Photo Frames", img:"assets/custom_frame.png", desc:"Premium finish designer frame with professional quality color print.", options:[{name:"Standard (No Border)", price:299}, {name:"1 Inch Border", price:349}, {name:"2 Inch Border", price:399}]},
+  {id:7, name:"8x12 Frame (1 Inch Border)", price:349, cat:"Designer Photo Frames", img:"assets/custom_frame.png", desc:"Sleek frame with elegant 1 inch border. Includes high quality photo printing."},
+  {id:8, name:"8x12 Frame (2 Inch Border)", price:399, cat:"Designer Photo Frames", img:"assets/custom_frame.png", desc:"Wide 2 inch border designer frame for that classic museum look."},
+  {id:9, name:"Plain White Customized Mug", price:120, cat:"Customized Mugs", img:"assets/premium_mug.png", desc:"Premium ceramic white mug with custom high-definition photo print."},
+  {id:10, name:"Custom Magic Mug", price:499, cat:"Customized Mugs", img:"assets/premium_mug.png", desc:"Heat-sensitive color changing ceramic mug. Reveal your photo with hot liquid."},
+  {id:11, name:"Wedding Ornate Gold Frame", price:599, cat:"Wedding Frames", img:"assets/frame_wedding.png", desc:"Luxury gold trim wedding photo frame with beautiful traditional textures."},
+  {id:12, name:"Collage Family Frame (6 Photos)", price:499, cat:"Collage Frames", img:"assets/frame_collage.png", desc:"Beautiful wood grain finish collage layout frame for six family memories."},
+  {id:13, name:"Premium Wooden Frame", price:399, cat:"Wooden Frames", img:"assets/frame_wooden.png", desc:"Bespoke dark walnut frame with natural wood texture and organic grains."},
+  {id:14, name:"Acrylic Floating Frame", price:799, cat:"Acrylic Frames", img:"assets/frame_acrylic.png", desc:"Ultra-modern clear acrylic frame. Photo appears to float magically on your wall."},
+  {id:15, name:"Metal Industrial Frame", price:699, cat:"Metal Frames", img:"assets/frame_metal.png", desc:"Brushed metallic gunmetal frame with sharp, clean lines for modern interiors."},
+  {id:16, name:"Classic Certificate Frame", price:249, cat:"Certificate Frames", img:"assets/frame_certificate.png", desc:"Professional certificate frame with gold inner bezel line to showcase achievements."},
+  {id:17, name:"Love Heart Coffee Mug", price:199, cat:"Customized Mugs", img:"assets/premium_mug.png", desc:"Beautiful red interior ceramic mug with custom photo print for your loved one."},
+  {id:18, name:"Collage Magic Mug", price:549, cat:"Customized Mugs", img:"assets/premium_mug.png", desc:"Heat-reveal magic mug featuring a custom collage of up to 4 photos."},
+  {id:19, name:"Luxury Gold Trim Frame", price:899, cat:"Premium Frames", img:"assets/frame_wedding.png", desc:"Ornate, heavy-duty gold accent frame. Bring royal elegance to your living room."},
+  {id:20, name:"Panoramic Wall Frame", price:1199, cat:"Premium Frames", img:"assets/custom_frame.png", desc:"Wide landscape wall frame. Perfect for panoramic nature shots and family portraits."}
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const pId = parseInt(urlParams.get('id')) || 1;
+  const p = products.find(prod => prod.id === pId) || products[0];
+
+  // Fill content
+  document.getElementById('mainProdImg').src = p.img;
+  document.getElementById('mainProdImg').alt = p.name;
+  document.getElementById('catName').textContent = p.cat;
+  document.getElementById('prodTitle').textContent = p.name;
+  document.getElementById('prodPrice').textContent = `₹${p.price}`;
+  document.getElementById('prodDesc').textContent = p.desc;
+  
+  // Render options if any
+  const vArea = document.getElementById('variant-area');
+  const vSelect = document.getElementById('variantSelect');
+  
+  if (p.options && p.options.length > 0) {
+    vArea.style.display = 'block';
+    vSelect.innerHTML = '';
+    p.options.forEach(opt => {
+      const option = document.createElement('option');
+      option.value = opt.price;
+      option.textContent = `${opt.name} - ₹${opt.price}`;
+      vSelect.appendChild(option);
+    });
+    
+    vSelect.addEventListener('change', (e) => {
+      document.getElementById('prodPrice').textContent = `₹${e.target.value}`;
+    });
+  }
+
+  // Order click
+  document.getElementById('orderBtn').onclick = () => {
+    let priceVal = p.price;
+    let optionText = '';
+    if (p.options && p.options.length > 0) {
+      priceVal = vSelect.value;
+      optionText = ` (${vSelect.options[vSelect.selectedIndex].text})`;
+    }
+    const msg = `Hi Junior's Printing World,%0A%0AI want to order:%0A*Product:* ${p.name}${optionText}%0A*Price:* ₹${priceVal}%0A%0APlease let me know how to send my photo for printing.`;
+    window.open(`https://wa.me/919030829667?text=${msg}`, '_blank');
+  };
+});
+</script>
+</body>
+</html>

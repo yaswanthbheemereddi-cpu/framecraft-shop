@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us | Junior's Printing World</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+.about-hero{padding:140px 0 50px;text-align:center;background:radial-gradient(ellipse at bottom,#110d00,#000);border-bottom:1px solid var(--border)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;padding:50px 0}
+@media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:2rem}}
+.about-image img{width:100%;border-radius:var(--r-lg);box-shadow:0 20px 50px rgba(0,0,0,0.5);border:1px solid var(--border)}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;text-align:center}
+.stat-item h3{font-size:2.5rem;color:var(--gold);margin-bottom:0.5rem;font-family:var(--sans);font-weight:600}
+.stat-item p{color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-size:0.9rem}
+</style>
+</head>
+<body>
+
+<nav class="navbar scrolled" id="nav">
+<div class="container">
+<a href="index.html" class="brand">Junior's Printing World</a>
+<ul class="nav-links" id="navlinks">
+<li><a href="index.html">Home</a></li>
+<li><a href="shop.html">Shop</a></li>
+<li><a href="designer.html">Frame Designer</a></li>
+<li><a href="gallery.html">Gallery</a></li>
+<li><a href="about.html" class="active">About</a></li>
+<li><a href="contact.html">Contact</a></li>
+<li><a href="https://wa.me/919030829667" class="nav-wa" target="_blank"><i class="fa-brands fa-whatsapp"></i> Order Now</a></li>
+</ul>
+<div style="display:flex;align-items:center;gap:1.5rem">
+<div class="theme-toggle" id="themeToggle" style="cursor:pointer;font-size:1.1rem;color:var(--gold);display:inline-flex;align-items:center;justify-content:center;transition:transform var(--tf);z-index:9005"><i class="fa-solid fa-moon"></i></div>
+<div class="hamburger" id="hbg"><span></span><span></span><span></span></div>
+</div>
+</div>
+</nav>
+
+<header class="about-hero reveal active">
+<div class="container">
+<h1 style="font-family:'Cinzel',serif;font-size:3.5rem;margin-bottom:1rem">Crafting Memories</h1>
+<p class="text-muted" style="max-width:700px;margin:0 auto;font-size:1.1rem">We are a premium design and printing studio dedicated to turning your most cherished moments into physical masterpieces.</p>
+</div>
+</header>
+
+<section class="section">
+<div class="container">
+<div class="about-grid">
+<div class="about-image reveal active">
+<img src="assets/custom_frame.png" alt="Our Craftsmanship">
+</div>
+<div class="reveal active" style="transition-delay:0.2s">
+<h2 style="font-family:'Cinzel',serif;font-size:2.5rem;margin-bottom:1.5rem">The Art of Perfection</h2>
+<p style="color:var(--muted);font-size:1.15rem;line-height:1.8;margin-bottom:1.5rem">
+At Junior's Printing World, we believe that a memory is not just a picture; it is an emotion frozen in time. Our mission is to elevate those emotions through world-class craftsmanship, premium materials, and unparalleled attention to detail.
+</p>
+<p style="color:var(--muted);font-size:1.15rem;line-height:1.8">
+Whether it's our signature Blood Art, customized bespoke frames, or personalized gifts, every piece that leaves our studio is crafted with love and precision to ensure it lasts a lifetime.
+</p>
+
+<div class="stats-grid">
+<div class="stat-item">
+<h3>10K+</h3>
+<p>Happy Clients</p>
+</div>
+<div class="stat-item">
+<h3>100%</h3>
+<p>Premium Quality</p>
+</div>
+<div class="stat-item">
+<h3>24/7</h3>
+<p>WhatsApp Support</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="container">
+<div class="footer-grid">
+<div class="footer-brand">
+<h3>Junior's Printing World</h3>
+<p>Turn Your Memories Into Beautiful Art. Premium photo frames, blood art, and custom gifts designed to elevate your living space.</p>
+</div>
+<div class="footer-links">
+<h4>Products</h4>
+<ul>
+<li><a href="shop.html">Blood Art</a></li>
+<li><a href="shop.html">Designer Frames</a></li>
+<li><a href="designer.html">Custom Frames</a></li>
+</ul>
+</div>
+<div class="footer-links">
+<h4>Contact &amp; Location</h4>
+<ul>
+<li><a href="tel:+919030829667">+91 9030829667</a></li>
+<li><a href="https://maps.app.goo.gl/MVhEMSAQm2VDoeSB7" target="_blank"><i class="fa-solid fa-map-pin" style="color:var(--gold)"></i> HPCL Campus, Nathavaram, AP 531117</a></li>
+<li>Open Daily · Closes 10 PM</li>
+</ul>
+</div>
+</div>
+</div>
+</footer>
+
+<a href="https://wa.me/919030829667" target="_blank" class="floating-wa"><i class="fa-brands fa-whatsapp"></i></a>
+<div class="back-top" id="bt"><i class="fa-solid fa-arrow-up"></i></div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

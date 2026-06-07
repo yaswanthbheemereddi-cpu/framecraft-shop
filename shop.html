@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop Collection | Junior's Printing World</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* Shop specific styles */
+.shop-header{padding:140px 0 40px;text-align:center;background:radial-gradient(ellipse at bottom, #110d00 0%, #000 70%);border-bottom:1px solid var(--border)}
+.shop-title{font-family:'Cinzel',serif;font-size:3rem;margin-bottom:.5rem;color:#fff}
+.shop-desc{color:var(--muted);font-size:.95rem;max-width:600px;margin:0 auto}
+
+.shop-container{display:grid;grid-template-columns:250px 1fr;gap:2rem;padding:3rem 0}
+@media(max-width:900px){.shop-container{grid-template-columns:1fr}}
+
+/* Sidebar Filters */
+.filter-sidebar{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;height:fit-content;position:sticky;top:90px}
+.filter-section{margin-bottom:1.8rem;border-bottom:1px solid var(--border);padding-bottom:1.5rem}
+.filter-section:last-child{margin-bottom:0;border-bottom:none;padding-bottom:0}
+.filter-title{font-size:.9rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#fff;margin-bottom:1rem;display:flex;justify-content:between;align-items:center}
+.search-box{position:relative;margin-bottom:1.5rem}
+.search-box input{width:100%;padding:10px 35px 10px 15px;background:#050505;border:1px solid var(--border);border-radius:8px;color:#fff;font-family:var(--sans);font-size:.85rem;outline:none;transition:border-color .3s}
+.search-box input:focus{border-color:var(--gold)}
+.search-box i{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.85rem}
+
+.category-list{list-style:none}
+.category-item{margin-bottom:.5rem}
+.category-btn{background:none;border:none;color:var(--muted);font-size:.85rem;font-family:var(--sans);cursor:pointer;width:100%;text-align:left;padding:6px 8px;border-radius:6px;transition:all .2s;display:flex;justify-content:space-between;align-items:center}
+.category-btn:hover,.category-btn.active{color:var(--gold);background:rgba(212,175,55,.06)}
+.category-count{font-size:.7rem;background:rgba(255,255,255,.05);color:var(--muted);padding:2px 6px;border-radius:4px}
+
+.sort-select{width:100%;padding:10px;background:#050505;border:1px solid var(--border);border-radius:8px;color:#fff;font-family:var(--sans);font-size:.85rem;outline:none;cursor:pointer}
+.sort-select:focus{border-color:var(--gold)}
+
+/* Grid and Toolbar */
+.shop-toolbar{display:flex;justify-content:space-between;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:10px 20px;margin-bottom:1.5rem;flex-wrap:wrap;gap:.8rem}
+.results-count{font-size:.85rem;color:var(--muted)}
+
+.no-results{text-align:center;padding:4rem 0;color:var(--muted)}
+.no-results i{font-size:3rem;color:var(--gold);margin-bottom:1rem;display:block}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar scrolled" id="nav">
+<div class="container">
+<a href="index.html" class="brand">Junior's Printing World</a>
+<ul class="nav-links" id="navlinks">
+<li><a href="index.html">Home</a></li>
+<li><a href="shop.html" class="active">Shop</a></li>
+<li><a href="designer.html">Frame Designer</a></li>
+<li><a href="gallery.html">Gallery</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="contact.html">Contact</a></li>
+<li><a href="https://wa.me/919030829667" class="nav-wa" target="_blank"><i class="fa-brands fa-whatsapp"></i> Order Now</a></li>
+</ul>
+<div style="display:flex;align-items:center;gap:1.5rem">
+<div class="theme-toggle" id="themeToggle" style="cursor:pointer;font-size:1.1rem;color:var(--gold);display:inline-flex;align-items:center;justify-content:center;transition:transform var(--tf);z-index:9005"><i class="fa-solid fa-moon"></i></div>
+<div class="hamburger" id="hbg"><span></span><span></span><span></span></div>
+</div>
+</div>
+</nav>
+
+<!-- HEADER -->
+<header class="shop-header">
+<div class="container">
+<h1 class="shop-title">The Print Studio</h1>
+<p class="shop-desc">Bespoke Blood Art portraits, premium photo frames, and customized coffee mugs. Curated quality for your homes and gifting.</p>
+</div>
+</header>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+<div class="shop-container">
+<!-- SIDEBAR FILTERS -->
+<aside class="filter-sidebar">
+<div class="search-box">
+<input type="text" id="search" placeholder="Search products...">
+<i class="fa-solid fa-magnifying-glass"></i>
+</div>
+
+<div class="filter-section">
+<h3 class="filter-title">Categories</h3>
+<ul class="category-list" id="categories-list">
+<!-- Dynamic categories -->
+</ul>
+</div>
+
+<div class="filter-section">
+<h3 class="filter-title">Sort By</h3>
+<select class="sort-select" id="sort-by">
+<option value="default">Default Sorter</option>
+<option value="price-asc">Price: Low to High</option>
+<option value="price-desc">Price: High to Low</option>
+<option value="name-asc">Name: A to Z</option>
+</select>
+</div>
+</aside>
+
+<!-- MAIN GRID -->
+<main>
+<div class="shop-toolbar">
+<span class="results-count" id="results-lbl">Showing all products</span>
+</div>
+
+<div class="product-grid" id="shop-grid">
+<!-- Dynamic products -->
+</div>
+
+<div class="no-results" id="no-results" style="display:none">
+<i class="fa-solid fa-face-frown"></i>
+<h3>No Products Found</h3>
+<p>Try matching other words or changing filters.</p>
+</div>
+</main>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+<div class="container">
+<div class="footer-grid">
+<div class="footer-brand">
+<h3>Junior's Printing World</h3>
+<p>Turn Your Memories Into Beautiful Art. Premium photo frames, blood art, and custom gifts designed to elevate your living space.</p>
+</div>
+<div class="footer-links">
+<h4>Products</h4>
+<ul>
+<li><a href="shop.html">Blood Art</a></li>
+<li><a href="shop.html">Designer Frames</a></li>
+<li><a href="designer.html">Custom Frames</a></li>
+</ul>
+</div>
+<div class="footer-links">
+<h4>Contact</h4>
+<ul>
+<li><a href="https://wa.me/919030829667" target="_blank">+91 9030829667</a></li>
+<li>Available 24/7 on WhatsApp</li>
+</ul>
+</div>
+</div>
+</div>
+</footer>
+
+<a href="https://wa.me/919030829667" target="_blank" class="floating-wa"><i class="fa-brands fa-whatsapp"></i></a>
+<div class="back-top" id="bt"><i class="fa-solid fa-arrow-up"></i></div>
+
+<script src="js/main.js"></script>
+<script>
+// --- 20 PRODUCTS DATA ---
+const products = [
+  {id:1, name:"Single Person Blood Art (A4)", price:2500, cat:"Blood Art", img:"assets/blood_art.png", tag:"NEW"},
+  {id:2, name:"Single Person Blood Art (A3)", price:3500, cat:"Blood Art", img:"assets/blood_art.png", tag:"HOT"},
+  {id:3, name:"Double Person Blood Art (A4)", price:3500, cat:"Blood Art", img:"assets/blood_art.png", tag:"NEW"},
+  {id:4, name:"Double Person Blood Art (A3)", price:4500, cat:"Blood Art", img:"assets/blood_art.png", tag:"HOT"},
+  {id:5, name:"A4 Customized Frame", price:120, cat:"Customized Frames", img:"assets/custom_frame.png", tag:"POPULAR"},
+  {id:6, name:"8x12 Designer Photo Frame", price:299, cat:"Designer Photo Frames", img:"assets/custom_frame.png", tag:"BEST"},
+  {id:7, name:"8x12 Frame (1 Inch Border)", price:349, cat:"Designer Photo Frames", img:"assets/custom_frame.png", tag:"POPULAR"},
+  {id:8, name:"8x12 Frame (2 Inch Border)", price:399, cat:"Designer Photo Frames", img:"assets/custom_frame.png", tag:"PREMIUM"},
+  {id:9, name:"Plain White Customized Mug", price:120, cat:"Customized Mugs", img:"assets/premium_mug.png", tag:"CLASSIC"},
+  {id:10, name:"Custom Magic Mug", price:499, cat:"Customized Mugs", img:"assets/premium_mug.png", tag:"HOT"},
+  {id:11, name:"Wedding Ornate Gold Frame", price:599, cat:"Wedding Frames", img:"assets/frame_wedding.png", tag:"NEW"},
+  {id:12, name:"Collage Family Frame (6 Photos)", price:499, cat:"Collage Frames", img:"assets/frame_collage.png", tag:"POPULAR"},
+  {id:13, name:"Premium Wooden Frame", price:399, cat:"Wooden Frames", img:"assets/frame_wooden.png", tag:"NATURAL"},
+  {id:14, name:"Acrylic Floating Frame", price:799, cat:"Acrylic Frames", img:"assets/frame_acrylic.png", tag:"PREMIUM"},
+  {id:15, name:"Metal Industrial Frame", price:699, cat:"Metal Frames", img:"assets/frame_metal.png", tag:"NEW"},
+  {id:16, name:"Classic Certificate Frame", price:249, cat:"Certificate Frames", img:"assets/frame_certificate.png", tag:"CLASSIC"},
+  {id:17, name:"Love Heart Coffee Mug", price:199, cat:"Customized Mugs", img:"assets/premium_mug.png", tag:"GIFT"},
+  {id:18, name:"Collage Magic Mug", price:549, cat:"Customized Mugs", img:"assets/premium_mug.png", tag:"NEW"},
+  {id:19, name:"Luxury Gold Trim Frame", price:899, cat:"Premium Frames", img:"assets/frame_wedding.png", tag:"HOT"},
+  {id:20, name:"Panoramic Wall Frame", price:1199, cat:"Premium Frames", img:"assets/custom_frame.png", tag:"PREMIUM"}
+];
+
+let activeCat = 'All';
+let searchQuery = '';
+let currentSort = 'default';
+
+// Render Categories List
+const catList = document.getElementById('categories-list');
+const catCounts = { 'All': products.length };
+products.forEach(p => {
+  catCounts[p.cat] = (catCounts[p.cat] || 0) + 1;
+});
+
+function renderCategories() {
+  catList.innerHTML = '';
+  Object.keys(catCounts).forEach(catName => {
+    const li = document.createElement('li');
+    li.className = 'category-item';
+    li.innerHTML = `
+      <button class="category-btn ${activeCat === catName ? 'active' : ''}" data-cat="${catName}">
+        <span>${catName}</span>
+        <span class="category-count">${catCounts[catName]}</span>
+      </button>
+    `;
+    catList.appendChild(li);
+  });
+  
+  // Attach listeners
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.onclick = (e) => {
+      activeCat = e.currentTarget.getAttribute('data-cat');
+      renderCategories();
+      filterAndRenderProducts();
+    };
+  });
+}
+
+// Filter and Render Products Grid
+const shopGrid = document.getElementById('shop-grid');
+const noResults = document.getElementById('no-results');
+const resultsLbl = document.getElementById('results-lbl');
+
+function filterAndRenderProducts() {
+  let filtered = [...products];
+  
+  // Category filter
+  if (activeCat !== 'All') {
+    filtered = filtered.filter(p => p.cat === activeCat);
+  }
+  
+  // Search filter
+  if (searchQuery.trim() !== '') {
+    const q = searchQuery.toLowerCase();
+    filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q));
+  }
+  
+  // Sort
+  if (currentSort === 'price-asc') {
+    filtered.sort((a,b) => a.price - b.price);
+  } else if (currentSort === 'price-desc') {
+    filtered.sort((a,b) => b.price - a.price);
+  } else if (currentSort === 'name-asc') {
+    filtered.sort((a,b) => a.name.localeCompare(b.name));
+  }
+  
+  // Display
+  shopGrid.innerHTML = '';
+  if (filtered.length === 0) {
+    noResults.style.display = 'block';
+    resultsLbl.textContent = 'Showing 0 results';
+  } else {
+    noResults.style.display = 'none';
+    resultsLbl.textContent = `Showing ${filtered.length} products`;
+    
+    filtered.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'product-card reveal active';
+      
+      let badgeHtml = '';
+      if(p.tag === 'NEW') badgeHtml = `<span class="badge-new">New</span>`;
+      if(p.tag === 'HOT') badgeHtml = `<span class="badge-hot">Hot</span>`;
+      
+      card.innerHTML = `
+        ${badgeHtml}
+        <div class="product-img-wrapper" onclick="window.location.href='product.html?id=${p.id}'">
+          <img src="${p.img}" alt="${p.name}">
+        </div>
+        <div class="product-info">
+          <span class="product-category">${p.cat}</span>
+          <h3 class="product-title" onclick="window.location.href='product.html?id=${p.id}'">${p.name}</h3>
+          <p class="product-price">Price: <strong>₹${p.price}</strong></p>
+          <a href="https://wa.me/919030829667?text=Hi%20Junior's%20Printing%20World!%20I%20am%20interested%20in%20ordering%20${encodeURIComponent(p.name)}%20for%20₹${p.price}." target="_blank" class="btn btn-wa" style="width:100%;margin-top:1rem;padding:10px;"><i class="fa-brands fa-whatsapp"></i> Buy Now</a>
+        </div>
+      `;
+      shopGrid.appendChild(card);
+    });
+  }
+}
+
+// Listeners
+document.getElementById('search').oninput = (e) => {
+  searchQuery = e.target.value;
+  filterAndRenderProducts();
+};
+
+document.getElementById('sort-by').onchange = (e) => {
+  currentSort = e.target.value;
+  filterAndRenderProducts();
+};
+
+// Initial run
+renderCategories();
+filterAndRenderProducts();
+
+// URL Query Category check
+const urlParams = new URLSearchParams(window.location.search);
+const qCat = urlParams.get('cat');
+if (qCat) {
+  // Convert URL cats to match list if possible
+  const matches = {
+    'blood-art': 'Blood Art',
+    'designer-frames': 'Designer Photo Frames',
+    'personalized-gifts': 'Customized Mugs'
+  };
+  if (matches[qCat]) {
+    activeCat = matches[qCat];
+    renderCategories();
+    filterAndRenderProducts();
+  }
+}
+</script>
+</body>
+</html>
