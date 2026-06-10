@@ -53,12 +53,6 @@ const galleryItems = [
     "title": "Traditional Ornate Gold Frame",
     "cat": "frames",
     "img": "assets/frame_wedding.png"
-  },
-  {
-    "id": 11,
-    "title": "ashok",
-    "cat": "blood-art",
-    "img": "assets/gallery/gallery_1781075646943.jpg"
   }
 ];
 // GALLERY_DATA_END
