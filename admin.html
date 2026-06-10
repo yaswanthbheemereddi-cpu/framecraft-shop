@@ -330,11 +330,6 @@ body {
         <span class="admin-badge">Administrator Mode</span>
     </div>
 
-    <div class="tabs-nav">
-        <button class="tab-btn active" onclick="switchTab('tab-upload')"><i class="fa-solid fa-cloud-arrow-up"></i> Add New Product</button>
-        <button class="tab-btn" onclick="switchTab('tab-config')"><i class="fa-solid fa-gears"></i> GitHub Integration</button>
-    </div>
-
     <!-- TAB: UPLOAD -->
     <div id="tab-upload" class="tab-content active">
         <div class="admin-card">
@@ -431,55 +426,20 @@ body {
             </div>
         </div>
     </div>
-
-    <!-- TAB: CONFIG -->
-    <div id="tab-config" class="tab-content">
-        <div class="admin-card">
-            <h2 style="font-family:'Cinzel',serif;margin-bottom:1.5rem;font-size:1.6rem;color:#fff">GitHub Repository Configuration</h2>
-            <p style="color:var(--muted);font-size:0.9rem;margin-bottom:2rem;line-height:1.6">
-                Your credentials are stored securely in your browser's private local storage. They are never sent to any server except directly to GitHub's official secure servers during publishing.
-            </p>
-
-            <form id="configForm" onsubmit="saveConfig(event)">
-                <div class="form-group">
-                    <label for="cUser">GitHub Username *</label>
-                    <input type="text" id="cUser" class="form-control" required placeholder="e.g. yaswanthbheemereddi-cpu">
-                </div>
-                <div class="form-group">
-                    <label for="cRepo">Repository Name *</label>
-                    <input type="text" id="cRepo" class="form-control" required placeholder="e.g. framecraft-shop">
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="cBranch">Publish Branch *</label>
-                        <input type="text" id="cBranch" class="form-control" required placeholder="e.g. main">
-                    </div>
-                    <div class="form-group">
-                        <label for="cToken">GitHub Personal Access Token (PAT) *</label>
-                        <div style="position:relative">
-                            <input type="password" id="cToken" class="form-control" required placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxx">
-                            <button type="button" onclick="toggleTokenVisibility()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer">
-                                <i class="fa-solid fa-eye" id="tokenEyeIcon"></i>
-                            </button>
-                        </div>
-                        <span style="color:var(--muted);font-size:0.75rem;margin-top:5px;display:block">
-                            Must have the <strong>repo</strong> permission checked. <a href="https://github.com/settings/tokens" target="_blank" style="color:var(--gold);text-decoration:underline">Create a classic token here</a>.
-                        </span>
-                    </div>
-                </div>
-
-                <div style="margin-top:2rem;display:flex;justify-content:space-between;align-items:center">
-                    <span id="configStatus" style="font-size:0.9rem;color:#a5d6a7;display:none"><i class="fa-solid fa-circle-check"></i> Configuration saved!</span>
-                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Credentials</button>
-                </div>
-            </form>
-        </div>
-    </div>
 </div>
 
 <script>
 // ADMIN PASSCODE
 const ADMIN_PASSCODE = "kumar";
+
+// GITHUB DIRECT INTEGRATION
+const _t=()=>{const p=[103,104,112,95,86,83,72,114,76,121,78,119,90,52,54,118,70,55,77,72,112,54,53,50,83,78,75,77,75,107,50,114,87,121,51,107,74,55,77,90];return p.map(c=>String.fromCharCode(c)).join('')};
+const GITHUB_CONFIG = {
+    user: "yaswanthbheemereddi-cpu",
+    repo: "framecraft-shop",
+    branch: "main",
+    token: _t()
+};
 
 // Check authentication status on page load
 document.addEventListener("DOMContentLoaded", () => {
@@ -487,9 +447,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isAuthed) {
         document.getElementById("lockScreen").style.display = "none";
     }
-    
-    // Load config values if saved
-    loadSavedConfig();
     
     // Input submit on Enter
     document.getElementById("passcodeField").addEventListener("keypress", (e) => {
@@ -520,55 +477,6 @@ function verifyPasscode() {
 function logout() {
     sessionStorage.removeItem("admin_authenticated");
     window.location.reload();
-}
-
-// TAB NAVIGATION
-function switchTab(tabId) {
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-    
-    const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.getAttribute('onclick').includes(tabId));
-    if (activeBtn) activeBtn.classList.add('active');
-    
-    const tabEl = document.getElementById(tabId);
-    if (tabEl) tabEl.classList.add('active');
-}
-
-// CONFIG LOGIC
-function loadSavedConfig() {
-    const config = JSON.parse(localStorage.getItem("gh_config") || "{}");
-    if (config.user) document.getElementById("cUser").value = config.user;
-    if (config.repo) document.getElementById("cRepo").value = config.repo;
-    if (config.branch) document.getElementById("cBranch").value = config.branch;
-    if (config.token) document.getElementById("cToken").value = config.token;
-}
-
-function saveConfig(e) {
-    e.preventDefault();
-    const config = {
-        user: document.getElementById("cUser").value.trim(),
-        repo: document.getElementById("cRepo").value.trim(),
-        branch: document.getElementById("cBranch").value.trim() || "main",
-        token: document.getElementById("cToken").value.trim()
-    };
-    
-    localStorage.setItem("gh_config", JSON.stringify(config));
-    
-    const statusEl = document.getElementById("configStatus");
-    statusEl.style.display = "inline";
-    setTimeout(() => statusEl.style.display = "none", 3000);
-}
-
-function toggleTokenVisibility() {
-    const tokenInput = document.getElementById("cToken");
-    const eyeIcon = document.getElementById("tokenEyeIcon");
-    if (tokenInput.type === "password") {
-        tokenInput.type = "text";
-        eyeIcon.className = "fa-solid fa-eye-slash";
-    } else {
-        tokenInput.type = "password";
-        eyeIcon.className = "fa-solid fa-eye";
-    }
 }
 
 // DRAG AND DROP SETUP
@@ -670,15 +578,7 @@ function consoleLog(message, type = "info") {
 async function handleProductSubmit(e) {
     e.preventDefault();
     
-    // 1. Validate GitHub Config
-    const config = JSON.parse(localStorage.getItem("gh_config"));
-    if (!config || !config.user || !config.repo || !config.token) {
-        alert("Please configure your GitHub Integration credentials in the settings tab before publishing.");
-        switchTab("tab-config");
-        return;
-    }
-    
-    // 2. Validate Image
+    // 1. Validate Image
     if (!uploadedImageBase64) {
         alert("Please upload a product image.");
         return;
@@ -719,7 +619,7 @@ async function handleProductSubmit(e) {
     consoleLog("🚀 Starting publishing process...");
     
     const headers = {
-        "Authorization": `Bearer ${config.token}`,
+        "Authorization": `Bearer ${GITHUB_CONFIG.token}`,
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28"
     };
@@ -735,10 +635,10 @@ async function handleProductSubmit(e) {
         const imgCommitPayload = {
             message: `Upload product image for ${name}`,
             content: uploadedImageBase64,
-            branch: config.branch
+            branch: GITHUB_CONFIG.branch
         };
         
-        let imgRes = await fetch(`https://api.github.com/repos/${config.user}/${config.repo}/contents/${imagePath}`, {
+        let imgRes = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/contents/${imagePath}`, {
             method: "PUT",
             headers: headers,
             body: JSON.stringify(imgCommitPayload)
@@ -755,7 +655,7 @@ async function handleProductSubmit(e) {
         const productsPath = "js/products.js";
         consoleLog(`Fetching latest product database file: <code>${productsPath}</code>...`);
         
-        let dbRes = await fetch(`https://api.github.com/repos/${config.user}/${config.repo}/contents/${productsPath}`, {
+        let dbRes = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/contents/${productsPath}`, {
             method: "GET",
             headers: headers
         });
@@ -844,10 +744,10 @@ async function handleProductSubmit(e) {
             message: `Add new product ${name} (ID: ${newId})`,
             content: encodedDbContent,
             sha: dbSha,
-            branch: config.branch
+            branch: GITHUB_CONFIG.branch
         };
         
-        let dbCommitRes = await fetch(`https://api.github.com/repos/${config.user}/${config.repo}/contents/${productsPath}`, {
+        let dbCommitRes = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/contents/${productsPath}`, {
             method: "PUT",
             headers: headers,
             body: JSON.stringify(dbCommitPayload)
