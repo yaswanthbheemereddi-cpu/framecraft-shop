@@ -55,12 +55,6 @@ const galleryItems = [
     "img": "assets/frame_wedding.png"
   },
   {
-    "id": 10,
-    "title": "ashok",
-    "cat": "frames",
-    "img": "assets/gallery/gallery_1781066586155.png"
-  },
-  {
     "id": 11,
     "title": "ashok",
     "cat": "blood-art",
