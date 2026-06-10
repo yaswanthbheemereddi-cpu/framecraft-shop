@@ -241,18 +241,19 @@ body {
 /* Tabs */
 .tabs-nav {
     display: flex;
-    gap: 10px;
+    gap: 6px;
     margin-bottom: 2rem;
     border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
 }
 .tab-btn {
     background: none;
     border: none;
-    padding: 12px 24px;
+    padding: 12px 18px;
     color: var(--muted);
     cursor: pointer;
     font-family: 'Inter', sans-serif;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 500;
     border-bottom: 2px solid transparent;
     transition: all var(--tf);
@@ -283,6 +284,67 @@ body {
 .logout-btn:hover {
     border-color: #ff3b30;
     color: #ff3b30;
+}
+/* Manage grid */
+.manage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+}
+.manage-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    transition: border-color var(--tf);
+}
+.manage-card:hover { border-color: rgba(212,175,55,.4); }
+.manage-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    display: block;
+}
+.manage-card-body {
+    padding: 12px;
+}
+.manage-card-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.manage-card-meta {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+.btn-delete {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #ff3b30;
+    color: #ff3b30;
+    padding: 7px 0;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all var(--tf);
+}
+.btn-delete:hover {
+    background: #ff3b30;
+    color: #fff;
+}
+.manage-loading {
+    text-align: center;
+    color: var(--muted);
+    padding: 3rem 0;
+    font-size: 0.95rem;
 }
 </style>
 </head>
@@ -331,8 +393,10 @@ body {
     </div>
 
     <div class="tabs-nav" style="margin-bottom:2rem">
-        <button class="tab-btn active" onclick="switchTab('tab-upload')"><i class="fa-solid fa-cloud-arrow-up"></i> Add New Product</button>
+        <button class="tab-btn active" onclick="switchTab('tab-upload')"><i class="fa-solid fa-cloud-arrow-up"></i> Add Product</button>
         <button class="tab-btn" onclick="switchTab('tab-gallery')"><i class="fa-solid fa-images"></i> Add Gallery Photo</button>
+        <button class="tab-btn" onclick="switchTab('tab-manage-products');loadManageProducts()"><i class="fa-solid fa-box"></i> Manage Products</button>
+        <button class="tab-btn" onclick="switchTab('tab-manage-gallery');loadManageGallery()"><i class="fa-solid fa-photo-film"></i> Manage Gallery</button>
     </div>
 
     <!-- TAB: UPLOAD -->
@@ -477,6 +541,36 @@ body {
             <div id="gConsoleWrapper" style="display:none;margin-top:2.5rem;border-top:1px solid var(--border);padding-top:1.5rem">
                 <h3 style="font-family:'Cinzel',serif;font-size:1.1rem;color:var(--gold);margin-bottom:0.8rem"><i class="fa-solid fa-terminal"></i> Publishing Console</h3>
                 <div class="console-box" id="gConsoleBox"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: MANAGE PRODUCTS -->
+    <div id="tab-manage-products" class="tab-content">
+        <div class="admin-card">
+            <h2 style="font-family:'Cinzel',serif;margin-bottom:0.5rem;font-size:1.6rem;color:#fff"><i class="fa-solid fa-box" style="color:var(--gold)"></i> Manage Products</h2>
+            <p style="color:var(--muted);font-size:0.9rem;margin-bottom:1rem">View and delete published products from the live store.</p>
+            <button class="btn btn-outline" onclick="loadManageProducts()" style="font-size:0.85rem;padding:8px 18px;margin-bottom:1rem"><i class="fa-solid fa-arrows-rotate"></i> Refresh List</button>
+            <div id="manageProductsGrid" class="manage-grid">
+                <div class="manage-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading products...</div>
+            </div>
+            <div id="mpConsoleWrapper" style="display:none;margin-top:2rem;border-top:1px solid var(--border);padding-top:1rem">
+                <div class="console-box" id="mpConsoleBox"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: MANAGE GALLERY -->
+    <div id="tab-manage-gallery" class="tab-content">
+        <div class="admin-card">
+            <h2 style="font-family:'Cinzel',serif;margin-bottom:0.5rem;font-size:1.6rem;color:#fff"><i class="fa-solid fa-photo-film" style="color:var(--gold)"></i> Manage Gallery</h2>
+            <p style="color:var(--muted);font-size:0.9rem;margin-bottom:1rem">View and delete photos from the live gallery.</p>
+            <button class="btn btn-outline" onclick="loadManageGallery()" style="font-size:0.85rem;padding:8px 18px;margin-bottom:1rem"><i class="fa-solid fa-arrows-rotate"></i> Refresh List</button>
+            <div id="manageGalleryGrid" class="manage-grid">
+                <div class="manage-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading gallery...</div>
+            </div>
+            <div id="mgConsoleWrapper" style="display:none;margin-top:2rem;border-top:1px solid var(--border);padding-top:1rem">
+                <div class="console-box" id="mgConsoleBox"></div>
             </div>
         </div>
     </div>
@@ -979,6 +1073,206 @@ async function handleGallerySubmit(e) {
     } catch(err) {
         gConsoleLog(`❌ Error: ${err.message}`, "error");
         console.error(err);
+    }
+}
+
+// ──────────────────────────────────────────────
+// MANAGE PRODUCTS — Load & Delete
+// ──────────────────────────────────────────────
+
+function mpLog(msg, type="info") {
+    const box = document.getElementById("mpConsoleBox");
+    const line = document.createElement("div");
+    line.className = `console-line ${type}`;
+    line.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}`;
+    box.appendChild(line);
+    box.scrollTop = box.scrollHeight;
+    document.getElementById("mpConsoleWrapper").style.display = "block";
+}
+
+async function loadManageProducts() {
+    const grid = document.getElementById("manageProductsGrid");
+    grid.innerHTML = `<div class="manage-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading products...</div>`;
+    const headers = {
+        "Authorization": `Bearer ${GITHUB_CONFIG.token}`,
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28"
+    };
+    try {
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/contents/js/products.js`, { headers });
+        if (!res.ok) throw new Error("Failed to load products.js");
+        const data = await res.json();
+        const decoded = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ''))));
+        const si = decoded.indexOf("// PRODUCTS_DATA_START");
+        const ei = decoded.indexOf("// PRODUCTS_DATA_END");
+        let body = decoded.substring(si + "// PRODUCTS_DATA_START".length, ei).trim();
+        const vi = body.indexOf("const products =");
+        let arrStr = body.substring(vi + "const products =".length).trim();
+        if (arrStr.endsWith(";")) arrStr = arrStr.slice(0, -1).trim();
+        const arr = JSON.parse(arrStr);
+
+        if (arr.length === 0) {
+            grid.innerHTML = `<div class="manage-loading">No products found.</div>`;
+            return;
+        }
+        grid.innerHTML = "";
+        arr.forEach(p => {
+            const card = document.createElement("div");
+            card.className = "manage-card";
+            const baseUrl = `https://raw.githubusercontent.com/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/`;
+            card.innerHTML = `
+                <img src="${baseUrl}${p.img}" alt="${p.name}" onerror="this.src='assets/custom_frame.png'">
+                <div class="manage-card-body">
+                    <div class="manage-card-title" title="${p.name}">${p.name}</div>
+                    <div class="manage-card-meta">₹${p.price} · ${p.cat} · ID:${p.id}</div>
+                    <button class="btn-delete" onclick="deleteProduct(${p.id})"><i class="fa-solid fa-trash-can"></i> Delete</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    } catch(err) {
+        grid.innerHTML = `<div class="manage-loading" style="color:#ef9a9a">❌ Error: ${err.message}</div>`;
+    }
+}
+
+async function deleteProduct(productId) {
+    if (!confirm(`Are you sure you want to DELETE product ID ${productId}? This cannot be undone.`)) return;
+    mpLog(`🗑️ Deleting product ID ${productId}...`);
+    const headers = {
+        "Authorization": `Bearer ${GITHUB_CONFIG.token}`,
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28"
+    };
+    try {
+        const filePath = "js/products.js";
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/contents/${filePath}`, { headers });
+        if (!res.ok) throw new Error("Failed to fetch products.js");
+        const data = await res.json();
+        const sha = data.sha;
+        const decoded = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ''))));
+        const si = decoded.indexOf("// PRODUCTS_DATA_START");
+        const ei = decoded.indexOf("// PRODUCTS_DATA_END");
+        let body = decoded.substring(si + "// PRODUCTS_DATA_START".length, ei).trim();
+        const vi = body.indexOf("const products =");
+        let arrStr = body.substring(vi + "const products =".length).trim();
+        if (arrStr.endsWith(";")) arrStr = arrStr.slice(0, -1).trim();
+        let arr = JSON.parse(arrStr);
+        const before = arr.length;
+        arr = arr.filter(p => p.id !== productId);
+        if (arr.length === before) throw new Error("Product ID not found in database");
+        const updated = `// PRODUCTS_DATA_START\nconst products = ${JSON.stringify(arr, null, 2)};\n// PRODUCTS_DATA_END`;
+        const encoded = btoa(unescape(encodeURIComponent(updated)));
+        const saveRes = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/contents/${filePath}`, {
+            method: "PUT",
+            headers,
+            body: JSON.stringify({ message: `Delete product ID ${productId}`, content: encoded, sha, branch: GITHUB_CONFIG.branch })
+        });
+        if (!saveRes.ok) throw new Error(`Save failed: ${saveRes.status}`);
+        mpLog(`✅ Product ID ${productId} deleted successfully!`, "success");
+        mpLog("🌐 Allow 1-2 minutes to reflect on the live site.", "success");
+        setTimeout(loadManageProducts, 1500);
+    } catch(err) {
+        mpLog(`❌ Error: ${err.message}`, "error");
+    }
+}
+
+// ──────────────────────────────────────────────
+// MANAGE GALLERY — Load & Delete
+// ──────────────────────────────────────────────
+
+function mgLog(msg, type="info") {
+    const box = document.getElementById("mgConsoleBox");
+    const line = document.createElement("div");
+    line.className = `console-line ${type}`;
+    line.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}`;
+    box.appendChild(line);
+    box.scrollTop = box.scrollHeight;
+    document.getElementById("mgConsoleWrapper").style.display = "block";
+}
+
+async function loadManageGallery() {
+    const grid = document.getElementById("manageGalleryGrid");
+    grid.innerHTML = `<div class="manage-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading gallery...</div>`;
+    const headers = {
+        "Authorization": `Bearer ${GITHUB_CONFIG.token}`,
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28"
+    };
+    try {
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/contents/js/gallery.js`, { headers });
+        if (!res.ok) throw new Error("Failed to load gallery.js");
+        const data = await res.json();
+        const decoded = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ''))));
+        const si = decoded.indexOf("// GALLERY_DATA_START");
+        const ei = decoded.indexOf("// GALLERY_DATA_END");
+        let body = decoded.substring(si + "// GALLERY_DATA_START".length, ei).trim();
+        const vi = body.indexOf("const galleryItems =");
+        let arrStr = body.substring(vi + "const galleryItems =".length).trim();
+        if (arrStr.endsWith(";")) arrStr = arrStr.slice(0, -1).trim();
+        const arr = JSON.parse(arrStr);
+
+        if (arr.length === 0) {
+            grid.innerHTML = `<div class="manage-loading">No gallery photos found.</div>`;
+            return;
+        }
+        grid.innerHTML = "";
+        const baseUrl = `https://raw.githubusercontent.com/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/`;
+        arr.forEach(g => {
+            const card = document.createElement("div");
+            card.className = "manage-card";
+            card.innerHTML = `
+                <img src="${baseUrl}${g.img}" alt="${g.title}" onerror="this.src='assets/custom_frame.png'">
+                <div class="manage-card-body">
+                    <div class="manage-card-title" title="${g.title}">${g.title}</div>
+                    <div class="manage-card-meta">${g.cat} · ID:${g.id}</div>
+                    <button class="btn-delete" onclick="deleteGalleryItem(${g.id})"><i class="fa-solid fa-trash-can"></i> Delete</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    } catch(err) {
+        grid.innerHTML = `<div class="manage-loading" style="color:#ef9a9a">❌ Error: ${err.message}</div>`;
+    }
+}
+
+async function deleteGalleryItem(itemId) {
+    if (!confirm(`Are you sure you want to DELETE gallery photo ID ${itemId}? This cannot be undone.`)) return;
+    mgLog(`🗑️ Deleting gallery photo ID ${itemId}...`);
+    const headers = {
+        "Authorization": `Bearer ${GITHUB_CONFIG.token}`,
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28"
+    };
+    try {
+        const filePath = "js/gallery.js";
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/contents/${filePath}`, { headers });
+        if (!res.ok) throw new Error("Failed to fetch gallery.js");
+        const data = await res.json();
+        const sha = data.sha;
+        const decoded = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ''))));
+        const si = decoded.indexOf("// GALLERY_DATA_START");
+        const ei = decoded.indexOf("// GALLERY_DATA_END");
+        let body = decoded.substring(si + "// GALLERY_DATA_START".length, ei).trim();
+        const vi = body.indexOf("const galleryItems =");
+        let arrStr = body.substring(vi + "const galleryItems =".length).trim();
+        if (arrStr.endsWith(";")) arrStr = arrStr.slice(0, -1).trim();
+        let arr = JSON.parse(arrStr);
+        const before = arr.length;
+        arr = arr.filter(g => g.id !== itemId);
+        if (arr.length === before) throw new Error("Gallery item ID not found in database");
+        const updated = `// GALLERY_DATA_START\nconst galleryItems = ${JSON.stringify(arr, null, 2)};\n// GALLERY_DATA_END`;
+        const encoded = btoa(unescape(encodeURIComponent(updated)));
+        const saveRes = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/contents/${filePath}`, {
+            method: "PUT",
+            headers,
+            body: JSON.stringify({ message: `Delete gallery photo ID ${itemId}`, content: encoded, sha, branch: GITHUB_CONFIG.branch })
+        });
+        if (!saveRes.ok) throw new Error(`Save failed: ${saveRes.status}`);
+        mgLog(`✅ Gallery photo ID ${itemId} deleted successfully!`, "success");
+        mgLog("🌐 Allow 1-2 minutes to reflect on the live site.", "success");
+        setTimeout(loadManageGallery, 1500);
+    } catch(err) {
+        mgLog(`❌ Error: ${err.message}`, "error");
     }
 }
 </script>
