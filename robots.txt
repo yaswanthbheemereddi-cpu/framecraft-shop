@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+
+Sitemap: https://yaswanthbheemereddi-cpu.github.io/framecraft-shop/sitemap.xml
