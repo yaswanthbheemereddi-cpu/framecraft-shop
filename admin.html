@@ -330,6 +330,11 @@ body {
         <span class="admin-badge">Administrator Mode</span>
     </div>
 
+    <div class="tabs-nav" style="margin-bottom:2rem">
+        <button class="tab-btn active" onclick="switchTab('tab-upload')"><i class="fa-solid fa-cloud-arrow-up"></i> Add New Product</button>
+        <button class="tab-btn" onclick="switchTab('tab-gallery')"><i class="fa-solid fa-images"></i> Add Gallery Photo</button>
+    </div>
+
     <!-- TAB: UPLOAD -->
     <div id="tab-upload" class="tab-content active">
         <div class="admin-card">
@@ -426,6 +431,55 @@ body {
             </div>
         </div>
     </div>
+
+    <!-- TAB: GALLERY -->
+    <div id="tab-gallery" class="tab-content">
+        <div class="admin-card">
+            <h2 style="font-family:'Cinzel',serif;margin-bottom:0.5rem;font-size:1.6rem;color:#fff"><i class="fa-solid fa-images" style="color:var(--gold)"></i> Add Photo to Gallery</h2>
+            <p style="color:var(--muted);font-size:0.9rem;margin-bottom:2rem">Upload a real photo of your work — it will appear live in the Gallery page for all visitors to see.</p>
+
+            <form id="galleryForm" onsubmit="handleGallerySubmit(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gTitle">Photo Title *</label>
+                        <input type="text" id="gTitle" class="form-control" required placeholder="e.g. Golden Wedding Frame Setup">
+                    </div>
+                    <div class="form-group">
+                        <label for="gCat">Category *</label>
+                        <select id="gCat" class="form-control" required>
+                            <option value="frames">Frames</option>
+                            <option value="blood-art">Blood Art</option>
+                            <option value="gifts">Gifts & Mugs</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:1.5rem">
+                    <label>Gallery Photo *</label>
+                    <div class="upload-zone" id="gUploadZone" onclick="document.getElementById('gImgInput').click()">
+                        <i class="fa-solid fa-camera"></i>
+                        <h4 style="margin:5px 0">Click or Drag & Drop Photo Here</h4>
+                        <p style="color:var(--muted);font-size:0.8rem">High resolution JPG or PNG recommended for best gallery display.</p>
+                        <input type="file" id="gImgInput" style="display:none" accept="image/*" onchange="previewGalleryImage(this)">
+                    </div>
+
+                    <div class="upload-preview" id="gUploadPreview">
+                        <img src="" id="gPreviewImg">
+                        <button type="button" class="remove-img-btn" onclick="removeGalleryImage()"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+
+                <div style="margin-top:2.5rem;display:flex;justify-content:flex-end">
+                    <button type="submit" class="btn btn-primary" style="font-size:1rem;padding:14px 40px"><i class="fa-solid fa-image"></i> Publish to Gallery</button>
+                </div>
+            </form>
+
+            <div id="gConsoleWrapper" style="display:none;margin-top:2.5rem;border-top:1px solid var(--border);padding-top:1.5rem">
+                <h3 style="font-family:'Cinzel',serif;font-size:1.1rem;color:var(--gold);margin-bottom:0.8rem"><i class="fa-solid fa-terminal"></i> Publishing Console</h3>
+                <div class="console-box" id="gConsoleBox"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -456,9 +510,21 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("loginBtn").onclick = verifyPasscode;
     document.getElementById("logoutBtn").onclick = logout;
     
-    // Setup drag and drop for image upload
+    // Setup drag and drop for product image upload
     setupDragAndDrop();
+    // Setup drag and drop for gallery image upload
+    setupGalleryDragAndDrop();
 });
+
+// TAB SWITCHING
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.getAttribute('onclick').includes(tabId));
+    if (activeBtn) activeBtn.classList.add('active');
+    const tabEl = document.getElementById(tabId);
+    if (tabEl) tabEl.classList.add('active');
+}
 
 // PASSCODE VERIFICATION
 function verifyPasscode() {
@@ -769,6 +835,150 @@ async function handleProductSubmit(e) {
     } catch (error) {
         consoleLog(`❌ Error publishing product: ${error.message}`, "error");
         console.error(error);
+    }
+}
+
+// ──────────────────────────────────────────────
+// GALLERY UPLOAD LOGIC
+// ──────────────────────────────────────────────
+
+let galleryImageBase64 = null;
+let galleryImageName = "";
+
+function setupGalleryDragAndDrop() {
+    const zone = document.getElementById("gUploadZone");
+    zone.addEventListener("dragover", (e) => { e.preventDefault(); zone.classList.add("dragover"); });
+    zone.addEventListener("dragleave", () => zone.classList.remove("dragover"));
+    zone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        zone.classList.remove("dragover");
+        if (e.dataTransfer.files.length) {
+            document.getElementById("gImgInput").files = e.dataTransfer.files;
+            previewGalleryImage(document.getElementById("gImgInput"));
+        }
+    });
+}
+
+function previewGalleryImage(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    galleryImageName = file.name;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        galleryImageBase64 = e.target.result.split(',')[1];
+        document.getElementById("gPreviewImg").src = e.target.result;
+        document.getElementById("gUploadZone").style.display = "none";
+        document.getElementById("gUploadPreview").style.display = "block";
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeGalleryImage() {
+    galleryImageBase64 = null;
+    galleryImageName = "";
+    document.getElementById("gImgInput").value = "";
+    document.getElementById("gUploadZone").style.display = "block";
+    document.getElementById("gUploadPreview").style.display = "none";
+    document.getElementById("gPreviewImg").src = "";
+}
+
+function gConsoleLog(message, type = "info") {
+    const box = document.getElementById("gConsoleBox");
+    const line = document.createElement("div");
+    line.className = `console-line ${type}`;
+    line.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
+    box.appendChild(line);
+    box.scrollTop = box.scrollHeight;
+}
+
+async function handleGallerySubmit(e) {
+    e.preventDefault();
+    if (!galleryImageBase64) { alert("Please upload a gallery photo."); return; }
+
+    const title = document.getElementById("gTitle").value.trim();
+    const cat   = document.getElementById("gCat").value;
+
+    const gConsoleWr = document.getElementById("gConsoleWrapper");
+    const gConsoleBox = document.getElementById("gConsoleBox");
+    gConsoleBox.innerHTML = "";
+    gConsoleWr.style.display = "block";
+
+    gConsoleLog("🚀 Starting gallery publish...");
+
+    const headers = {
+        "Authorization": `Bearer ${GITHUB_CONFIG.token}`,
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28"
+    };
+
+    try {
+        // Step 1: Upload image
+        const fileExt = galleryImageName.split('.').pop() || "jpg";
+        const imgName = `gallery_${Date.now()}.${fileExt}`;
+        const imgPath = `assets/gallery/${imgName}`;
+
+        gConsoleLog(`Uploading photo: <code>${imgPath}</code>...`);
+
+        const imgRes = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/contents/${imgPath}`, {
+            method: "PUT",
+            headers,
+            body: JSON.stringify({ message: `Add gallery photo: ${title}`, content: galleryImageBase64, branch: GITHUB_CONFIG.branch })
+        });
+        if (!imgRes.ok) throw new Error(`Image upload failed: ${imgRes.status} ${imgRes.statusText}`);
+        gConsoleLog("✅ Photo uploaded!", "success");
+
+        // Step 2: Fetch current gallery.js
+        const galleryPath = "js/gallery.js";
+        gConsoleLog("Fetching gallery database...");
+        const dbRes = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/contents/${galleryPath}`, { headers });
+        if (!dbRes.ok) throw new Error(`Failed to load gallery.js: ${dbRes.status}`);
+
+        const dbData = await dbRes.json();
+        const dbSha  = dbData.sha;
+        const decoded = decodeURIComponent(escape(atob(dbData.content.replace(/\s/g, ''))));
+
+        gConsoleLog("✅ Gallery database fetched. Updating array...");
+
+        // Step 3: Parse + append
+        const startMark = "// GALLERY_DATA_START";
+        const endMark   = "// GALLERY_DATA_END";
+        const si = decoded.indexOf(startMark);
+        const ei = decoded.indexOf(endMark);
+        if (si === -1 || ei === -1) throw new Error("GALLERY_DATA markers not found in gallery.js");
+
+        let body = decoded.substring(si + startMark.length, ei).trim();
+        const vi = body.indexOf("const galleryItems =");
+        if (vi === -1) throw new Error("galleryItems variable not found in gallery.js");
+
+        let arrStr = body.substring(vi + "const galleryItems =".length).trim();
+        if (arrStr.endsWith(";")) arrStr = arrStr.slice(0, -1).trim();
+
+        let arr = [];
+        try { arr = JSON.parse(arrStr); } catch(pe) { throw new Error(`Could not parse gallery.js: ${pe.message}`); }
+
+        const newId = (arr.reduce((m, g) => g.id > m ? g.id : m, 0)) + 1;
+        arr.push({ id: newId, title, cat, img: imgPath });
+
+        const updatedContent = `${startMark}\nconst galleryItems = ${JSON.stringify(arr, null, 2)};\n${endMark}`;
+        const encoded = btoa(unescape(encodeURIComponent(updatedContent)));
+
+        gConsoleLog("Saving updated gallery database...");
+        const saveRes = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.user}/${GITHUB_CONFIG.repo}/contents/${galleryPath}`, {
+            method: "PUT",
+            headers,
+            body: JSON.stringify({ message: `Add gallery photo: ${title} (ID: ${newId})`, content: encoded, sha: dbSha, branch: GITHUB_CONFIG.branch })
+        });
+        if (!saveRes.ok) { const t = await saveRes.text(); throw new Error(`Save failed: ${saveRes.status}. ${t}`); }
+
+        gConsoleLog(`🎉 SUCCESS! "${title}" is now live in the Gallery!`, "success");
+        gConsoleLog("🌐 Allow 1-2 minutes for GitHub Pages to rebuild.", "success");
+
+        document.getElementById("galleryForm").reset();
+        removeGalleryImage();
+
+    } catch(err) {
+        gConsoleLog(`❌ Error: ${err.message}`, "error");
+        console.error(err);
     }
 }
 </script>
