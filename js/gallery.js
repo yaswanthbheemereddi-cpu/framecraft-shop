@@ -59,6 +59,12 @@ const galleryItems = [
     "title": "ashok",
     "cat": "frames",
     "img": "assets/gallery/gallery_1781066586155.png"
+  },
+  {
+    "id": 11,
+    "title": "ashok",
+    "cat": "blood-art",
+    "img": "assets/gallery/gallery_1781075646943.jpg"
   }
 ];
 // GALLERY_DATA_END
