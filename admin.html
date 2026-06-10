@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | Junior's Printing World</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* Admin specific styling */
+body {
+    background: #000;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+}
+.admin-section {
+    padding: 120px 0 60px;
+}
+.admin-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 2.5rem;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    margin-bottom: 2rem;
+}
+.admin-header {
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.admin-header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    color: var(--gold);
+    margin: 0;
+}
+.admin-badge {
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.form-group {
+    margin-bottom: 1.5rem;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    background: #050505;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color var(--tf);
+}
+.form-control:focus {
+    border-color: var(--gold);
+}
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+/* Passcode Lock CSS */
+#lockScreen {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lock-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 3rem;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.05);
+}
+.lock-icon {
+    font-size: 3rem;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+/* Custom category input hidden by default */
+#customCategoryGroup {
+    display: none;
+    margin-top: 10px;
+}
+/* Image Upload Drag Drop Area */
+.upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--r-md);
+    padding: 2.5rem;
+    text-align: center;
+    cursor: pointer;
+    background: #050505;
+    transition: all var(--tf);
+}
+.upload-zone:hover, .upload-zone.dragover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.02);
+}
+.upload-zone i {
+    font-size: 2.5rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+}
+.upload-preview {
+    display: none;
+    position: relative;
+    max-width: 180px;
+    margin: 1.5rem auto 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+.upload-preview img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+.remove-img-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(0,0,0,0.8);
+    color: #ff3b30;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Dynamic Options UI */
+.option-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+    align-items: center;
+}
+.btn-delete-opt {
+    background: rgba(255, 59, 48, 0.1);
+    color: #ff3b30;
+    border: 1px solid rgba(255, 59, 48, 0.2);
+    border-radius: 8px;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--tf);
+}
+.btn-delete-opt:hover {
+    background: #ff3b30;
+    color: #fff;
+}
+.btn-add-opt {
+    background: transparent;
+    border: 1px dashed var(--border);
+    color: var(--muted);
+    padding: 10px;
+    border-radius: 8px;
+    width: 100%;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    transition: all var(--tf);
+    margin-bottom: 1.5rem;
+}
+.btn-add-opt:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+/* Logs console box */
+.console-box {
+    background: #000;
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: #a5d6a7;
+    padding: 1.5rem;
+    height: 180px;
+    overflow-y: auto;
+    margin-top: 1.5rem;
+}
+.console-line {
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+.console-line.error {
+    color: #ef9a9a;
+}
+.console-line.success {
+    color: var(--gold);
+    font-weight: bold;
+}
+/* Tabs */
+.tabs-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+}
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 12px 24px;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: all var(--tf);
+}
+.tab-btn:hover, .tab-btn.active {
+    color: var(--gold);
+}
+.tab-btn.active {
+    border-color: var(--gold);
+}
+.tab-content {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}
+.logout-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: 'Inter', sans-serif;
+    transition: all var(--tf);
+}
+.logout-btn:hover {
+    border-color: #ff3b30;
+    color: #ff3b30;
+}
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen">
+    <div class="lock-card">
+        <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+        <h2 style="font-family:'Cinzel',serif;margin-bottom:0.5rem">Admin Access</h2>
+        <p style="color:var(--muted);font-size:0.85rem;margin-bottom:2rem">Please enter the administrator passcode to manage products.</p>
+        <div class="form-group">
+            <input type="password" id="passcodeField" class="form-control" placeholder="Enter Passcode..." style="text-align:center;letter-spacing:4px">
+        </div>
+        <button class="btn btn-primary" id="loginBtn" style="width:100%">Verify Code</button>
+        <p id="lockError" style="color:#ff3b30;font-size:0.85rem;margin-top:1rem;display:none"><i class="fa-solid fa-circle-xmark"></i> Incorrect passcode. Try again.</p>
+    </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar scrolled" id="nav">
+    <div class="container">
+        <a href="index.html" class="brand">Junior's Printing World</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="designer.html">Frame Designer</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div>
+            <button class="logout-btn" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        </div>
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="container admin-section">
+    <div class="admin-header">
+        <div>
+            <h1>Dashboard Control Panel</h1>
+            <p style="color:var(--muted);font-size:0.9rem;margin-top:5px">Manage products and edit the live catalog.</p>
+        </div>
+        <span class="admin-badge">Administrator Mode</span>
+    </div>
+
+    <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('tab-upload')"><i class="fa-solid fa-cloud-arrow-up"></i> Add New Product</button>
+        <button class="tab-btn" onclick="switchTab('tab-config')"><i class="fa-solid fa-gears"></i> GitHub Integration</button>
+    </div>
+
+    <!-- TAB: UPLOAD -->
+    <div id="tab-upload" class="tab-content active">
+        <div class="admin-card">
+            <h2 style="font-family:'Cinzel',serif;margin-bottom:1.5rem;font-size:1.6rem;color:#fff">Add Frame or Gift Product</h2>
+            
+            <form id="productForm" onsubmit="handleProductSubmit(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pName">Product Name *</label>
+                        <input type="text" id="pName" class="form-control" required placeholder="e.g. Premium Golden Marriage Frame">
+                    </div>
+                    <div class="form-group">
+                        <label for="pPrice">Base Price (₹) *</label>
+                        <input type="number" id="pPrice" class="form-control" required placeholder="e.g. 599">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pCat">Category *</label>
+                        <select id="pCat" class="form-control" required onchange="checkCategoryChange(this)">
+                            <option value="Blood Art">Blood Art</option>
+                            <option value="Customized Frames">Customized Frames</option>
+                            <option value="Designer Photo Frames">Designer Photo Frames</option>
+                            <option value="Customized Mugs">Customized Mugs</option>
+                            <option value="Wedding Frames">Wedding Frames</option>
+                            <option value="Collage Frames">Collage Frames</option>
+                            <option value="Wooden Frames">Wooden Frames</option>
+                            <option value="Acrylic Frames">Acrylic Frames</option>
+                            <option value="Metal Frames">Metal Frames</option>
+                            <option value="Certificate Frames">Certificate Frames</option>
+                            <option value="Premium Frames" selected>Premium Frames</option>
+                            <option value="CUSTOM">Other / Create New Category...</option>
+                        </select>
+                        
+                        <div id="customCategoryGroup">
+                            <input type="text" id="customCat" class="form-control" placeholder="Enter custom category name...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pTag">Product Tag</label>
+                        <select id="pTag" class="form-control">
+                            <option value="">None</option>
+                            <option value="NEW">NEW (Green Badge)</option>
+                            <option value="HOT">HOT (Red Gold Badge)</option>
+                            <option value="POPULAR">POPULAR (Classic Tag)</option>
+                            <option value="BEST">BEST (Featured Tag)</option>
+                            <option value="PREMIUM">PREMIUM (Luxury Tag)</option>
+                            <option value="CLASSIC">CLASSIC (Standard Tag)</option>
+                            <option value="GIFT">GIFT (Perfect Gifting Tag)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="pDesc">Product Description *</label>
+                    <textarea id="pDesc" class="form-control" rows="3" required placeholder="Describe the item material, durability, sizing, and details..." style="resize:vertical"></textarea>
+                </div>
+
+                <!-- Product Options -->
+                <div class="form-group" style="margin-top:2rem">
+                    <label>Product Options / Sizing (Optional)</label>
+                    <p style="color:var(--muted);font-size:0.8rem;margin-bottom:10px">Add custom sizes or styles that customers can choose, each with its own price.</p>
+                    <div id="optionsContainer">
+                        <!-- Dynamic option rows go here -->
+                    </div>
+                    <button type="button" class="btn-add-opt" onclick="addOptionRow()"><i class="fa-solid fa-plus"></i> Add Option / Variant</button>
+                </div>
+
+                <!-- Product Image Upload -->
+                <div class="form-group" style="margin-top:2rem">
+                    <label>Product Image File *</label>
+                    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('imgInput').click()">
+                        <i class="fa-solid fa-image"></i>
+                        <h4 style="margin:5px 0">Click or Drag & Drop Image Here</h4>
+                        <p style="color:var(--muted);font-size:0.8rem">JPG, PNG or WEBP format. Best size ratio: 3:4 or 1:1.</p>
+                        <input type="file" id="imgInput" style="display:none" accept="image/*" onchange="previewImage(this)">
+                    </div>
+                    
+                    <div class="upload-preview" id="uploadPreview">
+                        <img src="" id="previewImg">
+                        <button type="button" class="remove-img-btn" onclick="removeImage()"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+
+                <div style="margin-top:2.5rem;display:flex;justify-content:flex-end">
+                    <button type="submit" class="btn btn-primary" style="font-size:1rem;padding:14px 40px"><i class="fa-solid fa-paper-plane"></i> Publish Product Live</button>
+                </div>
+            </form>
+            
+            <div id="consoleWrapper" style="display:none;margin-top:2.5rem;border-top:1px solid var(--border);padding-top:1.5rem">
+                <h3 style="font-family:'Cinzel',serif;font-size:1.1rem;color:var(--gold);margin-bottom:0.8rem"><i class="fa-solid fa-terminal"></i> Publishing Process Console</h3>
+                <div class="console-box" id="consoleBox"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: CONFIG -->
+    <div id="tab-config" class="tab-content">
+        <div class="admin-card">
+            <h2 style="font-family:'Cinzel',serif;margin-bottom:1.5rem;font-size:1.6rem;color:#fff">GitHub Repository Configuration</h2>
+            <p style="color:var(--muted);font-size:0.9rem;margin-bottom:2rem;line-height:1.6">
+                Your credentials are stored securely in your browser's private local storage. They are never sent to any server except directly to GitHub's official secure servers during publishing.
+            </p>
+
+            <form id="configForm" onsubmit="saveConfig(event)">
+                <div class="form-group">
+                    <label for="cUser">GitHub Username *</label>
+                    <input type="text" id="cUser" class="form-control" required placeholder="e.g. yaswanthbheemereddi-cpu">
+                </div>
+                <div class="form-group">
+                    <label for="cRepo">Repository Name *</label>
+                    <input type="text" id="cRepo" class="form-control" required placeholder="e.g. framecraft-shop">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cBranch">Publish Branch *</label>
+                        <input type="text" id="cBranch" class="form-control" required placeholder="e.g. main">
+                    </div>
+                    <div class="form-group">
+                        <label for="cToken">GitHub Personal Access Token (PAT) *</label>
+                        <div style="position:relative">
+                            <input type="password" id="cToken" class="form-control" required placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxx">
+                            <button type="button" onclick="toggleTokenVisibility()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer">
+                                <i class="fa-solid fa-eye" id="tokenEyeIcon"></i>
+                            </button>
+                        </div>
+                        <span style="color:var(--muted);font-size:0.75rem;margin-top:5px;display:block">
+                            Must have the <strong>repo</strong> permission checked. <a href="https://github.com/settings/tokens" target="_blank" style="color:var(--gold);text-decoration:underline">Create a classic token here</a>.
+                        </span>
+                    </div>
+                </div>
+
+                <div style="margin-top:2rem;display:flex;justify-content:space-between;align-items:center">
+                    <span id="configStatus" style="font-size:0.9rem;color:#a5d6a7;display:none"><i class="fa-solid fa-circle-check"></i> Configuration saved!</span>
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Credentials</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// ADMIN PASSCODE
+const ADMIN_PASSCODE = "1998";
+
+// Check authentication status on page load
+document.addEventListener("DOMContentLoaded", () => {
+    const isAuthed = sessionStorage.getItem("admin_authenticated") === "true";
+    if (isAuthed) {
+        document.getElementById("lockScreen").style.display = "none";
+    }
+    
+    // Load config values if saved
+    loadSavedConfig();
+    
+    // Input submit on Enter
+    document.getElementById("passcodeField").addEventListener("keypress", (e) => {
+        if (e.key === "Enter") verifyPasscode();
+    });
+    
+    document.getElementById("loginBtn").onclick = verifyPasscode;
+    document.getElementById("logoutBtn").onclick = logout;
+    
+    // Setup drag and drop for image upload
+    setupDragAndDrop();
+});
+
+// PASSCODE VERIFICATION
+function verifyPasscode() {
+    const val = document.getElementById("passcodeField").value.trim();
+    const errorEl = document.getElementById("lockError");
+    
+    if (val === ADMIN_PASSCODE) {
+        sessionStorage.setItem("admin_authenticated", "true");
+        document.getElementById("lockScreen").style.display = "none";
+        errorEl.style.display = "none";
+    } else {
+        errorEl.style.display = "block";
+    }
+}
+
+function logout() {
+    sessionStorage.removeItem("admin_authenticated");
+    window.location.reload();
+}
+
+// TAB NAVIGATION
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    
+    const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.getAttribute('onclick').includes(tabId));
+    if (activeBtn) activeBtn.classList.add('active');
+    
+    const tabEl = document.getElementById(tabId);
+    if (tabEl) tabEl.classList.add('active');
+}
+
+// CONFIG LOGIC
+function loadSavedConfig() {
+    const config = JSON.parse(localStorage.getItem("gh_config") || "{}");
+    if (config.user) document.getElementById("cUser").value = config.user;
+    if (config.repo) document.getElementById("cRepo").value = config.repo;
+    if (config.branch) document.getElementById("cBranch").value = config.branch;
+    if (config.token) document.getElementById("cToken").value = config.token;
+}
+
+function saveConfig(e) {
+    e.preventDefault();
+    const config = {
+        user: document.getElementById("cUser").value.trim(),
+        repo: document.getElementById("cRepo").value.trim(),
+        branch: document.getElementById("cBranch").value.trim() || "main",
+        token: document.getElementById("cToken").value.trim()
+    };
+    
+    localStorage.setItem("gh_config", JSON.stringify(config));
+    
+    const statusEl = document.getElementById("configStatus");
+    statusEl.style.display = "inline";
+    setTimeout(() => statusEl.style.display = "none", 3000);
+}
+
+function toggleTokenVisibility() {
+    const tokenInput = document.getElementById("cToken");
+    const eyeIcon = document.getElementById("tokenEyeIcon");
+    if (tokenInput.type === "password") {
+        tokenInput.type = "text";
+        eyeIcon.className = "fa-solid fa-eye-slash";
+    } else {
+        tokenInput.type = "password";
+        eyeIcon.className = "fa-solid fa-eye";
+    }
+}
+
+// DRAG AND DROP SETUP
+function setupDragAndDrop() {
+    const zone = document.getElementById("uploadZone");
+    
+    zone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        zone.classList.add("dragover");
+    });
+    
+    zone.addEventListener("dragleave", () => {
+        zone.classList.remove("dragover");
+    });
+    
+    zone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        zone.classList.remove("dragover");
+        if (e.dataTransfer.files.length) {
+            document.getElementById("imgInput").files = e.dataTransfer.files;
+            previewImage(document.getElementById("imgInput"));
+        }
+    });
+}
+
+// IMAGE PREVIEW
+let uploadedImageBase64 = null;
+let uploadedImageName = "";
+
+function previewImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+    
+    if (!file.type.startsWith("image/")) {
+        alert("Please select a valid image file.");
+        return;
+    }
+    
+    uploadedImageName = file.name;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        uploadedImageBase64 = e.target.result.split(',')[1]; // Get raw base64 part
+        document.getElementById("previewImg").src = e.target.result;
+        document.getElementById("uploadZone").style.display = "none";
+        document.getElementById("uploadPreview").style.display = "block";
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeImage() {
+    uploadedImageBase64 = null;
+    uploadedImageName = "";
+    document.getElementById("imgInput").value = "";
+    document.getElementById("uploadZone").style.display = "block";
+    document.getElementById("uploadPreview").style.display = "none";
+    document.getElementById("previewImg").src = "";
+}
+
+// DYNAMIC OPTIONS LOGIC
+function addOptionRow() {
+    const container = document.getElementById("optionsContainer");
+    const row = document.createElement("div");
+    row.className = "option-row";
+    row.innerHTML = `
+        <input type="text" class="form-control opt-name" placeholder="Option name (e.g. A3 Size)" required>
+        <input type="number" class="form-control opt-price" placeholder="Option price (₹)" required>
+        <button type="button" class="btn-delete-opt" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash-can"></i></button>
+    `;
+    container.appendChild(row);
+}
+
+// CATEGORY TYPE CHECK
+function checkCategoryChange(select) {
+    const customGroup = document.getElementById("customCategoryGroup");
+    const customInput = document.getElementById("customCat");
+    
+    if (select.value === "CUSTOM") {
+        customGroup.style.display = "block";
+        customInput.required = true;
+    } else {
+        customGroup.style.display = "none";
+        customInput.required = false;
+    }
+}
+
+// PUBLISHING CONSOLE WRITER
+function consoleLog(message, type = "info") {
+    const consoleBox = document.getElementById("consoleBox");
+    const line = document.createElement("div");
+    line.className = `console-line ${type}`;
+    
+    const timestamp = new Date().toLocaleTimeString();
+    line.innerHTML = `[${timestamp}] ${message}`;
+    consoleBox.appendChild(line);
+    consoleBox.scrollTop = consoleBox.scrollHeight;
+}
+
+// MAIN PUBLISH PRODUCT LOGIC
+async function handleProductSubmit(e) {
+    e.preventDefault();
+    
+    // 1. Validate GitHub Config
+    const config = JSON.parse(localStorage.getItem("gh_config"));
+    if (!config || !config.user || !config.repo || !config.token) {
+        alert("Please configure your GitHub Integration credentials in the settings tab before publishing.");
+        switchTab("tab-config");
+        return;
+    }
+    
+    // 2. Validate Image
+    if (!uploadedImageBase64) {
+        alert("Please upload a product image.");
+        return;
+    }
+    
+    const name = document.getElementById("pName").value.trim();
+    const price = parseInt(document.getElementById("pPrice").value);
+    
+    let category = document.getElementById("pCat").value;
+    if (category === "CUSTOM") {
+        category = document.getElementById("customCat").value.trim();
+        if (!category) {
+            alert("Please input a name for the new custom category.");
+            return;
+        }
+    }
+    
+    const tag = document.getElementById("pTag").value;
+    const desc = document.getElementById("pDesc").value.trim();
+    
+    // Parse options
+    const optionRows = document.querySelectorAll(".option-row");
+    const options = [];
+    optionRows.forEach(row => {
+        const optName = row.querySelector(".opt-name").value.trim();
+        const optPrice = parseInt(row.querySelector(".opt-price").value);
+        if (optName && !isNaN(optPrice)) {
+            options.push({ name: optName, price: optPrice });
+        }
+    });
+    
+    // Show console
+    const consoleWr = document.getElementById("consoleWrapper");
+    const consoleBox = document.getElementById("consoleBox");
+    consoleBox.innerHTML = "";
+    consoleWr.style.display = "block";
+    
+    consoleLog("🚀 Starting publishing process...");
+    
+    const headers = {
+        "Authorization": `Bearer ${config.token}`,
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28"
+    };
+    
+    try {
+        // Step 1: Upload Product Image to GitHub Repo
+        const fileExt = uploadedImageName.split('.').pop() || "png";
+        const imageName = `img_${Date.now()}.${fileExt}`;
+        const imagePath = `assets/products/${imageName}`;
+        
+        consoleLog(`Uploading image file to repository: <code>${imagePath}</code>...`);
+        
+        const imgCommitPayload = {
+            message: `Upload product image for ${name}`,
+            content: uploadedImageBase64,
+            branch: config.branch
+        };
+        
+        let imgRes = await fetch(`https://api.github.com/repos/${config.user}/${config.repo}/contents/${imagePath}`, {
+            method: "PUT",
+            headers: headers,
+            body: JSON.stringify(imgCommitPayload)
+        });
+        
+        if (!imgRes.ok) {
+            const errDetails = await imgRes.text();
+            throw new Error(`Failed to upload image to repo. GitHub API returned: ${imgRes.status} ${imgRes.statusText}. Details: ${errDetails}`);
+        }
+        
+        consoleLog("✅ Image uploaded successfully!", "success");
+        
+        // Step 2: Retrieve current js/products.js to append database entry
+        const productsPath = "js/products.js";
+        consoleLog(`Fetching latest product database file: <code>${productsPath}</code>...`);
+        
+        let dbRes = await fetch(`https://api.github.com/repos/${config.user}/${config.repo}/contents/${productsPath}`, {
+            method: "GET",
+            headers: headers
+        });
+        
+        if (!dbRes.ok) {
+            throw new Error(`Failed to load product database from repository: ${dbRes.status} ${dbRes.statusText}`);
+        }
+        
+        const dbFileData = await dbRes.json();
+        const dbSha = dbFileData.sha;
+        const decodedContent = decodeURIComponent(escape(atob(dbFileData.content.replace(/\s/g, ''))));
+        
+        consoleLog("✅ Product database fetched. Extracting data array...");
+        
+        // Parse out the JSON array from the file contents
+        const startMarker = "// PRODUCTS_DATA_START";
+        const endMarker = "// PRODUCTS_DATA_END";
+        
+        const startIndex = decodedContent.indexOf(startMarker);
+        const endIndex = decodedContent.indexOf(endMarker);
+        
+        if (startIndex === -1 || endIndex === -1) {
+            throw new Error("Could not find the // PRODUCTS_DATA_START or // PRODUCTS_DATA_END markers in your products.js file. Make sure they are preserved.");
+        }
+        
+        // Extract array body
+        let fileBody = decodedContent.substring(startIndex + startMarker.length, endIndex).trim();
+        
+        // Find the index of "const products = " and strip it
+        const varIndex = fileBody.indexOf("const products =");
+        if (varIndex === -1) {
+            throw new Error("Could not find the products variable declaration inside products.js");
+        }
+        
+        let arrayStr = fileBody.substring(varIndex + "const products =".length).trim();
+        // Remove trailing semicolon if present
+        if (arrayStr.endsWith(";")) {
+            arrayStr = arrayStr.substring(0, arrayStr.length - 1).trim();
+        }
+        
+        // Parse array JSON
+        let productsArray = [];
+        try {
+            productsArray = JSON.parse(arrayStr);
+        } catch (pe) {
+            consoleLog(`Parsing failed, attempting fallback cleanup...`, "error");
+            // If strictly JSON parsing failed, try evaluating safely or parse it using standard JSON parsing rules
+            throw new Error(`The products database file format is invalid and could not be parsed as JSON: ${pe.message}`);
+        }
+        
+        // Calculate new ID
+        let maxId = 0;
+        productsArray.forEach(p => {
+            if (p.id > maxId) maxId = p.id;
+        });
+        const newId = maxId + 1;
+        
+        // Create new product object
+        const newProduct = {
+            id: newId,
+            name: name,
+            price: price,
+            cat: category,
+            img: imagePath,
+            desc: desc
+        };
+        
+        if (tag) newProduct.tag = tag;
+        if (options.length > 0) newProduct.options = options;
+        
+        // Push to array
+        productsArray.push(newProduct);
+        consoleLog(`Generated new product ID: <strong>${newId}</strong>. Re-saving database...`);
+        
+        // Re-construct the file string
+        const updatedArrayString = JSON.stringify(productsArray, null, 2);
+        const updatedFileContent = `// PRODUCTS_DATA_START\nconst products = ${updatedArrayString};\n// PRODUCTS_DATA_END`;
+        
+        // Base64 encode the new file content
+        // Handle Unicode characters correctly in JavaScript Base64 encoding
+        const encodedDbContent = btoa(unescape(encodeURIComponent(updatedFileContent)));
+        
+        consoleLog("Committing updated database to repository...");
+        
+        const dbCommitPayload = {
+            message: `Add new product ${name} (ID: ${newId})`,
+            content: encodedDbContent,
+            sha: dbSha,
+            branch: config.branch
+        };
+        
+        let dbCommitRes = await fetch(`https://api.github.com/repos/${config.user}/${config.repo}/contents/${productsPath}`, {
+            method: "PUT",
+            headers: headers,
+            body: JSON.stringify(dbCommitPayload)
+        });
+        
+        if (!dbCommitRes.ok) {
+            const errText = await dbCommitRes.text();
+            throw new Error(`Failed to commit database update. GitHub API returned: ${dbCommitRes.status} ${dbCommitRes.statusText}. Details: ${errText}`);
+        }
+        
+        consoleLog(`🎉 SUCCESS! "${name}" has been published.`, "success");
+        consoleLog("🌐 Note: It will take 1-2 minutes for GitHub Pages to rebuild and show the new product.", "success");
+        
+        // Clear form & preview
+        document.getElementById("productForm").reset();
+        document.getElementById("optionsContainer").innerHTML = "";
+        removeImage();
+        
+    } catch (error) {
+        consoleLog(`❌ Error publishing product: ${error.message}`, "error");
+        console.error(error);
+    }
+}
+</script>
+</body>
+</html>
