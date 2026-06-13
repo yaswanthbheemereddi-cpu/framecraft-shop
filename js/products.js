@@ -9,8 +9,14 @@ const products = [
     "tag": "NEW",
     "desc": "Stunning handcrafted red ink portrait on textured paper in premium black A4 frame.",
     "options": [
-      { "name": "A4 Size", "price": 2500 },
-      { "name": "A3 Size", "price": 3500 }
+      {
+        "name": "A4 Size",
+        "price": 2500
+      },
+      {
+        "name": "A3 Size",
+        "price": 3500
+      }
     ]
   },
   {
@@ -22,7 +28,10 @@ const products = [
     "tag": "HOT",
     "desc": "Stunning handcrafted red ink portrait on textured paper in premium black A3 frame.",
     "options": [
-      { "name": "A3 Size", "price": 3500 }
+      {
+        "name": "A3 Size",
+        "price": 3500
+      }
     ]
   },
   {
@@ -34,8 +43,14 @@ const products = [
     "tag": "NEW",
     "desc": "Beautiful double portrait handcrafted in signature red ink in premium black A4 frame.",
     "options": [
-      { "name": "A4 Size", "price": 3500 },
-      { "name": "A3 Size", "price": 4500 }
+      {
+        "name": "A4 Size",
+        "price": 3500
+      },
+      {
+        "name": "A3 Size",
+        "price": 4500
+      }
     ]
   },
   {
@@ -47,7 +62,10 @@ const products = [
     "tag": "HOT",
     "desc": "Beautiful double portrait handcrafted in signature red ink in premium black A3 frame.",
     "options": [
-      { "name": "A3 Size", "price": 4500 }
+      {
+        "name": "A3 Size",
+        "price": 4500
+      }
     ]
   },
   {
@@ -68,9 +86,18 @@ const products = [
     "tag": "BEST",
     "desc": "Premium finish designer frame with professional quality color print.",
     "options": [
-      { "name": "Standard (No Border)", "price": 299 },
-      { "name": "1 Inch Border", "price": 349 },
-      { "name": "2 Inch Border", "price": 399 }
+      {
+        "name": "Standard (No Border)",
+        "price": 299
+      },
+      {
+        "name": "1 Inch Border",
+        "price": 349
+      },
+      {
+        "name": "2 Inch Border",
+        "price": 399
+      }
     ]
   },
   {
@@ -216,6 +243,21 @@ const products = [
     "img": "assets/frame_vintage.png",
     "tag": "POPULAR",
     "desc": "Vintage barnwood photo frame with antique brass corners for a rustic aesthetic."
+  },
+  {
+    "id": 23,
+    "name": "Yash",
+    "price": 599,
+    "cat": "Acrylic Frames",
+    "img": "assets/products/img_1781362850096.jpg",
+    "desc": "Nxxn",
+    "tag": "PREMIUM",
+    "options": [
+      {
+        "name": "Kdk",
+        "price": 55
+      }
+    ]
   }
 ];
 // PRODUCTS_DATA_END
