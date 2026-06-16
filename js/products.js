@@ -258,6 +258,15 @@ const products = [
         "price": 55
       }
     ]
+  },
+  {
+    "id": 24,
+    "name": "Kumar frame",
+    "price": 299,
+    "cat": "Customized Frames",
+    "img": "assets/products/img_1781628902259.jpg",
+    "desc": "Adhote pedadham",
+    "tag": "NEW"
   }
 ];
 // PRODUCTS_DATA_END
